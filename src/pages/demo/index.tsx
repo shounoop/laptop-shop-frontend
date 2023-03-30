@@ -9,7 +9,7 @@ const Demo = () => {
 	useEffect(() => {
 		(async () => {
 			try {
-				const resHere = await mainAxios.get(`http://localhost:3000/api/hello`);
+				const resHere = await mainAxios.get(`/api/hello`);
 
 				if (resHere) {
 					setRes(resHere);
