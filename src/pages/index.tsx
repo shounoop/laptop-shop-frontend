@@ -1,12 +1,13 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import HomePage from '../modules/Home';
-
-const inter = Inter({ subsets: ['latin'] });
+import ThemeToggle from '@/src/comps/ThemeToggle';
+import { useThemeContext } from '@/src/contexts/theme-context';
+import { Row } from 'antd';
 
 export default function Home() {
+	const theme = useThemeContext();
+
 	return (
 		// <div className="bg-black h-screen overflow-hidden">
 		<>
@@ -21,6 +22,14 @@ export default function Home() {
 			</Head>
 
 			<HomePage />
+
+			<Row style={{ padding: 30, backgroundColor: `#e9e9e9` }}>
+				<ThemeToggle />
+
+				<div className="flex grow items-center justify-center text-6xl font-bold">
+					{theme === 'dark' ? 'FaMoon' : 'FaSun'}
+				</div>
+			</Row>
 		</>
 	);
 }
