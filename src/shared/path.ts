@@ -1,7 +1,7 @@
 enum PATH {
 	HOME = '/',
 	PAYMENT = '/payment',
-	DEMO = '/demo',
+	DEMO = '/get-user-by-id',
 }
 
 export default PATH;
