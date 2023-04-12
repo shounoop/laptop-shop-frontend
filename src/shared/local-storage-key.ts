@@ -1,5 +1,7 @@
-enum LocalStorageKey {
-	Theme = 'theme',
+enum LOCAL_STORAGE_KEY {
+	PREFIX = 'shounoop',
+	TOKEN = 'token',
+	THEME = 'theme',
 }
 
-export default LocalStorageKey;
+export default LOCAL_STORAGE_KEY;

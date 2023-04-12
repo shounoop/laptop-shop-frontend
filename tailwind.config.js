@@ -1,3 +1,4 @@
+// OLD
 // /** @type {import('tailwindcss').Config} */
 // module.exports = {
 //   content: [],
@@ -7,6 +8,7 @@
 //   plugins: [],
 // }
 
+// NEW
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -18,7 +20,11 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      // colors: {
+      //   transparent: 'transparent',
+      // }
+    },
   },
   plugins: [],
 }

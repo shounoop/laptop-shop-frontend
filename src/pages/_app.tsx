@@ -1,14 +1,18 @@
-import '@/src/styles/globals.css';
+import '@/src/styles/_globals.css';
 import type { AppProps } from 'next/app';
 import MainLayout from '../layouts/MainLayout';
 import { ThemeContextProvider } from '../contexts/theme-context';
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
-		<ThemeContextProvider>
-			<MainLayout>
-				<Component {...pageProps} />
-			</MainLayout>
-		</ThemeContextProvider>
+		<Provider store={store}>
+			<ThemeContextProvider>
+				<MainLayout>
+					<Component {...pageProps} />
+				</MainLayout>
+			</ThemeContextProvider>
+		</Provider>
 	);
 }

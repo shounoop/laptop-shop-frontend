@@ -1,4 +1,13 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, {
+	AxiosError,
+	AxiosInstance,
+	AxiosRequestConfig,
+	AxiosResponse,
+	InternalAxiosRequestConfig,
+} from 'axios';
+import Router from 'next/router';
+import { deleteCookie, getCookie } from '../utils/cookie';
+import STORAGE from '../shared/local-storage-key';
 
 class MainAxios {
 	private static instance: AxiosInstance;
@@ -36,10 +45,38 @@ class MainAxios {
 }
 
 const mainAxios = MainAxios.getInstance({
-	baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
-	headers: {
-		'Content-Type': 'application/json',
-	},
+	// baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
+	withCredentials: true,
+	headers: { 'Content-Type': 'application/json' },
 });
+
+mainAxios.interceptors.request.use(
+	(config: InternalAxiosRequestConfig<any>) => {
+		if (config && config?.headers && typeof window !== 'undefined' && getCookie(STORAGE.TOKEN)) {
+			config.headers.Authorization = `Bearer ${getCookie(STORAGE.TOKEN)}`;
+		}
+		return config;
+	},
+	(error: AxiosError) => {
+		return Promise.reject(error);
+	}
+);
+
+mainAxios.interceptors.response.use(
+	(response: AxiosResponse) => {
+		if (response && response?.data) {
+			return response.data;
+		}
+		return response;
+	},
+	(error: AxiosError) => {
+		if (error.response?.status === 401 && typeof window !== 'undefined') {
+			// window.location.href = `/`;
+			deleteCookie(STORAGE.TOKEN);
+			Router.push('/');
+		}
+		return Promise.reject(error);
+	}
+);
 
 export default mainAxios;
