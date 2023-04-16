@@ -4,6 +4,8 @@ import MainLayout from '../layouts/MainLayout';
 import { ThemeContextProvider } from '../contexts/theme-context';
 import { Provider } from 'react-redux';
 import { store } from '../redux/store';
+// import 'antd/dist/antd.css';
+import 'antd/dist/reset.css';
 
 export default function App({ Component, pageProps }: AppProps) {
 	return (
