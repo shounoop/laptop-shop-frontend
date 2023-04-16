@@ -38,7 +38,7 @@ const HomePage: React.FC = () => {
 				</Row>
 			)}
 
-			{/* <LaptopItem /> */}
+			<LaptopItem />
 			{laptops && laptops?.map((item, index) => <LaptopItem data={item} key={index} />)}
 		</div>
 	);

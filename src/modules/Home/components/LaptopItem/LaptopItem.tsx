@@ -23,7 +23,6 @@ const LaptopItem: React.FC<Props> = (props) => {
 				<Row align={'middle'} justify={'space-between'}>
 					<Col>
 						<button className="bg-green-500 text-white rounded-md px-4 py-2">Book Now</button>
-						{/* <Button className="bg-green-500 text-white rounded-md px-4 py-2">Book Now</Button> */}
 					</Col>
 
 					<Col>
