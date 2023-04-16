@@ -1,14 +1,13 @@
-import mainAxios from '@/src/libs/main-axios';
 import PATH from '@/src/shared/path';
-import { Button, Col, Input, Modal, Row, Typography } from 'antd';
+import { Button, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import TabItem from './TabItem/TabItem';
-import { deleteCookie, getCookie, setCookie } from '@/src/utils/cookie';
+import { deleteCookie, getCookie } from '@/src/utils/cookie';
 import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key';
 import { isAuthenticatedJwt } from '@/src/utils/jwt';
 import { useAppDispatch, useAppSelector } from '@/src/redux/hooks';
 import { getIsAuthenticated, setIsAuthenticated } from '@/src/redux/slices/authSlice';
-import LoginModal from '@/src/comps/LoginModal/LoginModal';
+import { LoginModal } from '@/src/components';
 
 const Header: React.FC = () => {
 	// store
@@ -46,7 +45,8 @@ const Header: React.FC = () => {
 					<Row align={'middle'}>
 						<TabItem href={PATH.HOME} title="LAPTOP SHOP" isHome />
 						<TabItem href={PATH.PAYMENT} title="PAYMENT" />
-						<TabItem href={PATH.DEMO} title="GET-USER" />
+						<TabItem href={PATH.GET_USER_BY_ID} title="GET-USER" />
+						<TabItem href={PATH.DEMO_COMPS} title="DEMO-COMPS" />
 					</Row>
 				</Col>
 

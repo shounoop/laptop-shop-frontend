@@ -1,4 +1,3 @@
-import { Button } from 'antd';
 import HomePage from '../modules/Home';
 import Head from 'next/head';
 
@@ -17,19 +16,7 @@ export default function Home() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			{/* <HomePage /> */}
-
-			{/* <div>
-				<h1 className="text-3xl font-bold underline">Hello world!</h1>
-
-				<Button size="large" type="primary">
-					Button
-				</Button>
-
-				<Button size="large" type="primary" className="bg-primary border-primary">
-					Button
-				</Button>
-			</div> */}
+			<HomePage />
 
 			{/* <Row style={{ padding: 30, backgroundColor: `#e9e9e9` }}>
 				<ThemeToggle />
