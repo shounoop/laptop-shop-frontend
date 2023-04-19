@@ -18,7 +18,7 @@
 	}
 
 	&-secondary {
-		@apply bg-secondary hover:bg-secondary focus:bg-secondary opacity-100 hover:opacity-80 border border-secondary hover:border-secondary focus:border-secondary text-dark focus:text-dark hover:text-dark #{!important};
+		@apply bg-secondary hover:bg-secondary focus:bg-secondary opacity-100 hover:opacity-80 border border-secondary hover:border-secondary focus:border-secondary text-white focus:text-white hover:text-white #{!important};
 
 		&[disabled] {
 			@apply bg-white text-grey1 border border-grey1;

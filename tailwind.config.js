@@ -15,13 +15,13 @@ module.exports = {
         roboto: ['Roboto', 'sans-serif']
       },
       colors: { // custom color palette
-        primary: '#441151',
-        secondary: '#EE85B5',
+        primary: '#ea580c',
+        secondary: '#2563eb',
         violet: '#883677',
         congo: '##FF958C',
-        success: '#5FC790',
+        success: '#22c55e',
         warning: '#FFA600',
-        danger: '#FF5630',
+        danger: '#dc2626',
         dark: '#2E3A44',
         info: '#1CA7EC',
         black: '#2E3A44',
@@ -34,4 +34,7 @@ module.exports = {
     },
   },
   plugins: [],
+  corePlugins: {
+    // preflight: false,
+  }
 }

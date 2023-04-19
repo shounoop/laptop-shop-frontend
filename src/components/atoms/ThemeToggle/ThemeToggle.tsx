@@ -1,6 +1,6 @@
 import { Button } from 'antd';
-import { Theme } from '../shared/theme';
-import { useSetThemeContext, useThemeContext } from '../contexts/theme-context';
+import { Theme } from '../../../shared/theme';
+import { useSetThemeContext, useThemeContext } from '../../../contexts/theme-context';
 
 const ThemeToggle = () => {
 	const currentTheme = useThemeContext();
