@@ -40,7 +40,11 @@ const Header: React.FC = () => {
 
 	return (
 		<>
-			<Row justify={'space-between'} align={'middle'} style={{ padding: `42px 120px` }}>
+			<Row
+				justify={'space-between'}
+				align={'middle'}
+				className="px-[120px] py-[42px]"
+			>
 				<Col style={{ marginLeft: -30 }}>
 					<Row align={'middle'}>
 						<TabItem href={PATH.HOME} title="LAPTOP SHOP" isHome />

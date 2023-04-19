@@ -1,8 +1,8 @@
-import LaptopItem from './components/LaptopItem/LaptopItem';
 import { useEffect, useState } from 'react';
 import mainAxios from '@/src/libs/main-axios';
 import { Title } from '@/src/components';
 import { Col, Row } from 'antd';
+import LaptopItem from './components/LaptopItem';
 
 const HomePage: React.FC = () => {
 	const [laptops, setLaptops] = useState<any[]>();
@@ -20,7 +20,7 @@ const HomePage: React.FC = () => {
 
 	return (
 		<div>
-			<Title level={4} text="Tất cả sản phẩm"/>
+			<Title level={4} text="Tất cả sản phẩm" />
 
 			<Row gutter={[24, 24]}>
 				<Col span={8}>
@@ -30,9 +30,11 @@ const HomePage: React.FC = () => {
 				<Col span={8}>
 					<LaptopItem />
 				</Col>
+
 				<Col span={8}>
 					<LaptopItem />
 				</Col>
+
 				<Col span={8}>
 					<LaptopItem />
 				</Col>
