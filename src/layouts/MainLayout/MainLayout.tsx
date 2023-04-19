@@ -12,7 +12,7 @@ const MainLayout: React.FC<Props> = (props) => {
 			<div className="bg-zinc-300 min-h-screen">
 				<Header />
 
-				<div className='px-[90px]'>{children}</div>
+				<div className='mt-[116px] px-[90px] py-6'>{children}</div>
 			</div>
 		</>
 	);

@@ -8,7 +8,7 @@ const Title: React.FC<Props> = (props) => {
 	const { level = 1, text, className } = props;
 
 	return (
-		<AntdTitle level={level} className={className}>
+		<AntdTitle level={level} className={`m-0 ${className}`}>
 			{text}
 		</AntdTitle>
 	);
