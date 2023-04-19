@@ -16,7 +16,7 @@ const TabItem: React.FC<Props> = (props) => {
 				<Link
 					href={href}
 					className={
-						isHome ? 'text-black font-bold text-2xl' : 'px-7 py-1 text-black text-base font-normal'
+						isHome ? 'text-black font-bold text-2xl hover:text-primary pr-6' : 'px-7 py-1 font-medium text-black text-base hover:text-primary'
 					}
 				>
 					{title}

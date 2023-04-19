@@ -9,10 +9,10 @@ const MainLayout: React.FC<Props> = (props) => {
 
 	return (
 		<>
-			<div style={{ backgroundColor: `#fefefe` }}>
+			<div className="bg-zinc-300 min-h-screen">
 				<Header />
 
-				{children}
+				<div className='px-[90px]'>{children}</div>
 			</div>
 		</>
 	);

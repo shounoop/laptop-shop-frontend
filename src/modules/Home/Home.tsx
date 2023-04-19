@@ -1,13 +1,10 @@
-import { useAppSelector } from '@/src/redux/hooks';
-import { getIsAuthenticated } from '@/src/redux/slices/authSlice';
-import { Row, Typography } from 'antd';
 import LaptopItem from './components/LaptopItem/LaptopItem';
 import { useEffect, useState } from 'react';
 import mainAxios from '@/src/libs/main-axios';
+import { Title } from '@/src/components';
+import { Col, Row } from 'antd';
 
 const HomePage: React.FC = () => {
-	const isAuthenticated = useAppSelector(getIsAuthenticated);
-
 	const [laptops, setLaptops] = useState<any[]>();
 
 	useEffect(() => {
@@ -23,22 +20,24 @@ const HomePage: React.FC = () => {
 
 	return (
 		<div>
-			{isAuthenticated && (
-				<Row justify={'space-between'} align={'middle'}>
-					<Typography.Title
-						style={{
-							padding: 10,
-							borderRadius: 8,
-							backgroundColor: `#ff7d03`,
-						}}
-						level={5}
-					>
-						{`Logged in`}
-					</Typography.Title>
-				</Row>
-			)}
+			<Title level={4} text="Tất cả sản phẩm"/>
 
-			<LaptopItem />
+			<Row gutter={[24, 24]}>
+				<Col span={8}>
+					<LaptopItem />
+				</Col>
+
+				<Col span={8}>
+					<LaptopItem />
+				</Col>
+				<Col span={8}>
+					<LaptopItem />
+				</Col>
+				<Col span={8}>
+					<LaptopItem />
+				</Col>
+			</Row>
+
 			{laptops && laptops?.map((item, index) => <LaptopItem data={item} key={index} />)}
 		</div>
 	);

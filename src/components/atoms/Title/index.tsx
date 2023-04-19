@@ -4,8 +4,14 @@ import { Props } from './title.props';
 
 const { Title: AntdTitle } = Typography;
 
-const Title: React.FC<Props> = ({ level = 1, text }) => {
-	return <AntdTitle level={level}>{text}</AntdTitle>;
+const Title: React.FC<Props> = (props) => {
+	const { level = 1, text, className } = props;
+
+	return (
+		<AntdTitle level={level} className={className}>
+			{text}
+		</AntdTitle>
+	);
 };
 
 export default Title;
