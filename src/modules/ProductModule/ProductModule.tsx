@@ -1,8 +1,19 @@
 import { Button, Title } from '@/src/components';
-import { Col, Row } from 'antd';
+import { Col, Input, Row } from 'antd';
 import Reputation from './Reputation/Reputation';
+import { useState } from 'react';
+import Link from 'next/link';
+import PATH from '@/src/shared/path';
 
 const ProductModule: React.FC = () => {
+	// useState
+	const [quantity, setQuantity] = useState(1);
+
+	// functions
+	const onChangeQuantity = (e: any) => {
+		setQuantity(Number(e.target.value));
+	};
+
 	return (
 		<div className="rounded bg-white p-4">
 			<div className="border-b border-solid border-gray-400 pb-4">
@@ -27,7 +38,7 @@ const ProductModule: React.FC = () => {
 						<Title className="text-primary" text={`Deal: 19.890.000`} />
 					</div>
 
-					<Row className='mt-2'>
+					<Row className="mt-4">
 						<Col>
 							<Title level={5} text={`Bảo hành:`} />
 						</Col>
@@ -36,18 +47,43 @@ const ProductModule: React.FC = () => {
 							<Title level={5} className="font-normal" text={`12 tháng LaptopAZ`} />
 						</Col>
 					</Row>
-					
-					<Row className='mt-2'>
+
+					<Row className="mt-4">
 						<Col>
 							<Title level={5} text={`Tình trạng:`} />
 						</Col>
 
-						<Col className="ml-1">
-							<Title level={5} className="font-normal" text={`còn hàng`} />
+						<Col className="ml-1.5">
+							<Title level={5} className="font-normal" text={`4353 sản phẩm có sẵn`} />
 						</Col>
 					</Row>
 
-					<Button text='Mua ngay' size='large' className='mt-4 min-w-[150px]'/>
+					<Row align={'middle'} gutter={16} justify={'start'} className="mt-6">
+						<Col>
+							<Title level={5} text={`Số lượng`} />
+						</Col>
+
+						<Col>
+							<Input
+								value={quantity}
+								onChange={onChangeQuantity}
+								size="small"
+								className="min-w-fit max-w-[60px] px-4 py-1"
+							/>
+						</Col>
+					</Row>
+
+					<Row gutter={24} align={'bottom'} justify={'space-between'} className="mt-6">
+						<Col span={12}>
+							<Button type="success" size="large" text="Thêm vào giỏ hàng" className="w-full" />
+						</Col>
+
+						<Col span={12}>
+							<Link href={PATH.CART}>
+								<Button type="primary" size="large" text="Mua ngay" className="w-full" />
+							</Link>
+						</Col>
+					</Row>
 				</Col>
 
 				<Reputation />

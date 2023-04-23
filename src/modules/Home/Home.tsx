@@ -48,43 +48,49 @@ const HomePage: React.FC = () => {
 						</Col>
 					</Row>
 				</Col>
+
+				{/* <Col>
+					<Row align={'middle'} gutter={16} justify={'end'} className="mb-4">
+						<Col>
+							<Select
+								size={'middle'}
+								defaultValue="Tất cả"
+								onChange={handleChange}
+								options={options}
+							/>
+						</Col>
+
+						<Col>
+							<Button type="primary" className="min-w-[90.08px]" text="Lọc" />
+						</Col>
+					</Row>
+				</Col> */}
 			</Row>
 
-			<Row gutter={16} justify={'end'} className="mb-4">
-				<Col>
-					<Select
-						size={'middle'}
-						defaultValue="Tất cả"
-						onChange={handleChange}
-						style={{ width: 300 }}
-						options={options}
-					/>
+			<Row gutter={[24, 24]} className="mt-6">
+				<Col span={8}>
+					<LaptopItem />
 				</Col>
 
-				<Col>
-					<Button type='primary' className='min-w-[90.08px]' text="Lọc" />
+				<Col span={8}>
+					<LaptopItem />
 				</Col>
+
+				<Col span={8}>
+					<LaptopItem />
+				</Col>
+
+				<Col span={8}>
+					<LaptopItem />
+				</Col>
+
+				{laptops &&
+					laptops?.map((item, index) => (
+						<Col span={8} key={index}>
+							<LaptopItem data={item} />
+						</Col>
+					))}
 			</Row>
-
-			<Row gutter={[24, 24]}>
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-			</Row>
-
-			{laptops && laptops?.map((item, index) => <LaptopItem data={item} key={index} />)}
 		</div>
 	);
 };

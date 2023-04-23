@@ -1,5 +1,5 @@
 import PATH from '@/src/shared/path';
-import { Button as AntdBtn, Col, Row } from 'antd';
+import { Button as AntdBtn, Avatar, Col, Row, Tooltip, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import TabItem from './TabItem/TabItem';
 import { deleteCookie, getCookie } from '@/src/utils/cookie';
@@ -8,6 +8,7 @@ import { isAuthenticatedJwt } from '@/src/utils/jwt';
 import { useAppDispatch, useAppSelector } from '@/src/redux/hooks';
 import { getIsAuthenticated, setIsAuthenticated } from '@/src/redux/slices/authSlice';
 import { Button, LoginModal } from '@/src/components';
+import { UserOutlined } from '@ant-design/icons';
 
 const Header: React.FC = () => {
 	// store
@@ -48,6 +49,7 @@ const Header: React.FC = () => {
 				<Col className="ml-[-30px]">
 					<Row align={'middle'}>
 						<TabItem href={PATH.HOME} title="LAPTOP SHOP" isHome />
+						<TabItem href={PATH.CART} title="Xem giỏ hàng" />
 						<TabItem href={PATH.PAYMENT} title="PAYMENT" />
 						<TabItem href={PATH.GET_USER_BY_ID} title="GET-USER" />
 						<TabItem href={PATH.DEMO_COMPS} title="DEMO-COMPS" />
@@ -70,9 +72,25 @@ const Header: React.FC = () => {
 
 				{isAuthenticated && (
 					<Col className="mr-[-30px]">
-						<Row justify={'center'}>
-							<AntdBtn onClick={handleLogout}>LOG OUT</AntdBtn>
-						</Row>
+						<Tooltip
+							arrow={false}
+							overlayInnerStyle={{ background: `white` }}
+							className="mr-4"
+							placement="bottomLeft"
+							overlay={<Button onClick={handleLogout} className="mr-4" text='Sign out'/>}
+						>
+							<Row>
+								<Col className="mr-2">
+									<Row align={'middle'} className="h-full">
+										<Typography>Username</Typography>
+									</Row>
+								</Col>
+
+								<Col>
+									<Avatar size={'default'} icon={<UserOutlined />} />
+								</Col>
+							</Row>
+						</Tooltip>
 					</Col>
 				)}
 			</Row>
