@@ -1,10 +1,9 @@
 import { Button, Title } from '@/src/components';
 import mainAxios from '@/src/libs/main-axios';
-import { Col, Input, Row, Space, Tag } from 'antd';
-import Table, { ColumnsType } from 'antd/es/table';
+import { Col, Row, Table } from 'antd';
+import { ColumnsType } from 'antd/es/table';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { redirect } from 'next/navigation';
 
 interface DataType {
 	key: string;
@@ -45,7 +44,7 @@ const ProductModule: React.FC = () => {
 			const res: any = await mainAxios.post(`http://localhost:3001/users/payment-url`, payload);
 
 			if (res?.links?.[1]) {
-				console.log(res?.links?.[1])
+				console.log(res?.links?.[1]);
 				router.replace(res?.links?.[1].href);
 			}
 		})();

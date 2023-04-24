@@ -1,5 +1,5 @@
 import PATH from '@/src/shared/path';
-import { Button as AntdBtn, Avatar, Col, Row, Tooltip, Typography } from 'antd';
+import { Avatar, Col, Row, Tooltip, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import TabItem from './TabItem/TabItem';
 import { deleteCookie, getCookie } from '@/src/utils/cookie';
@@ -77,7 +77,7 @@ const Header: React.FC = () => {
 							overlayInnerStyle={{ background: `white` }}
 							className="mr-4"
 							placement="bottomLeft"
-							overlay={<Button onClick={handleLogout} className="mr-4" text='Sign out'/>}
+							overlay={<Button onClick={handleLogout} className="mr-4" text="Sign out" />}
 						>
 							<Row>
 								<Col className="mr-2">

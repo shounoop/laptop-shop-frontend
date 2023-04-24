@@ -1,3 +1,4 @@
+import MainLayout from '@/src/layouts/MainLayout/MainLayout';
 import mainAxios from '@/src/libs/main-axios';
 import { useAppSelector } from '@/src/redux/hooks';
 import { getIsAuthenticated } from '@/src/redux/slices/authSlice';
@@ -19,7 +20,11 @@ const DemoPage = () => {
 		})();
 	}, []);
 
-	return <div>get user by id</div>;
+	return (
+		<MainLayout>
+			<div>get user by id</div>
+		</MainLayout>
+	);
 };
 
 export default DemoPage;

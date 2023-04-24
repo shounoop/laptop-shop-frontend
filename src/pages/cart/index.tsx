@@ -1,7 +1,12 @@
+import MainLayout from '@/src/layouts/MainLayout/MainLayout';
 import CartModule from '@/src/modules/CartModule';
 
 const CartPage = () => {
-	return <CartModule />;
+	return (
+		<MainLayout>
+			<CartModule />
+		</MainLayout>
+	);
 };
 
 export default CartPage;

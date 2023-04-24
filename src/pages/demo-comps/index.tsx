@@ -1,10 +1,11 @@
 import { SectionButton, SectionInput, SectionSwitch, Title } from '@/src/components';
+import MainLayout from '@/src/layouts/MainLayout/MainLayout';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
 const DemoComponents: NextPage = () => {
 	return (
-		<>
+		<MainLayout>
 			<Head>
 				<title>Antd + Tailwindcss + SCSS</title>
 			</Head>
@@ -19,7 +20,7 @@ const DemoComponents: NextPage = () => {
 
 				<SectionSwitch />
 			</main>
-		</>
+		</MainLayout>
 	);
 };
 

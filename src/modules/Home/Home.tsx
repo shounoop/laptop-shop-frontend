@@ -10,8 +10,8 @@ const HomePage: React.FC = () => {
 	useEffect(() => {
 		(async () => {
 			try {
-				const res = await mainAxios.get('http://localhost:3004/product');
-				setLaptops(res.data);
+				const res: any = await mainAxios.get('http://localhost:3004/products');
+				setLaptops(res);
 			} catch (error) {
 				console.log(error);
 			}
@@ -19,16 +19,15 @@ const HomePage: React.FC = () => {
 	}, []);
 
 	// functions
-	const handleChange = () => {};
 
-	const options: SelectProps['options'] = [];
+	// const options: SelectProps['options'] = [];
 
-	for (let i = 10; i < 36; i++) {
-		options.push({
-			value: i.toString(36) + i,
-			label: i.toString(36) + i,
-		});
-	}
+	// for (let i = 10; i < 36; i++) {
+	// 	options.push({
+	// 		value: i.toString(36) + i,
+	// 		label: i.toString(36) + i,
+	// 	});
+	// }
 
 	return (
 		<div>
@@ -68,22 +67,6 @@ const HomePage: React.FC = () => {
 			</Row>
 
 			<Row gutter={[24, 24]} className="mt-6">
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
 				{laptops &&
 					laptops?.map((item, index) => (
 						<Col span={8} key={index}>
