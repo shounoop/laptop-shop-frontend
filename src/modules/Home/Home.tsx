@@ -10,8 +10,8 @@ const HomePage: React.FC = () => {
 	useEffect(() => {
 		(async () => {
 			try {
-				const res = await mainAxios.get('http://localhost:3004/product');
-				setLaptops(res.data);
+				const res: any = await mainAxios.get('http://localhost:3004/products');
+				setLaptops(res);
 			} catch (error) {
 				console.log(error);
 			}
@@ -19,16 +19,15 @@ const HomePage: React.FC = () => {
 	}, []);
 
 	// functions
-	const handleChange = () => {};
 
-	const options: SelectProps['options'] = [];
+	// const options: SelectProps['options'] = [];
 
-	for (let i = 10; i < 36; i++) {
-		options.push({
-			value: i.toString(36) + i,
-			label: i.toString(36) + i,
-		});
-	}
+	// for (let i = 10; i < 36; i++) {
+	// 	options.push({
+	// 		value: i.toString(36) + i,
+	// 		label: i.toString(36) + i,
+	// 	});
+	// }
 
 	return (
 		<div>
@@ -48,43 +47,33 @@ const HomePage: React.FC = () => {
 						</Col>
 					</Row>
 				</Col>
+
+				{/* <Col>
+					<Row align={'middle'} gutter={16} justify={'end'} className="mb-4">
+						<Col>
+							<Select
+								size={'middle'}
+								defaultValue="Tất cả"
+								onChange={handleChange}
+								options={options}
+							/>
+						</Col>
+
+						<Col>
+							<Button type="primary" className="min-w-[90.08px]" text="Lọc" />
+						</Col>
+					</Row>
+				</Col> */}
 			</Row>
 
-			<Row gutter={16} justify={'end'} className="mb-4">
-				<Col>
-					<Select
-						size={'middle'}
-						defaultValue="Tất cả"
-						onChange={handleChange}
-						style={{ width: 300 }}
-						options={options}
-					/>
-				</Col>
-
-				<Col>
-					<Button type='primary' className='min-w-[90.08px]' text="Lọc" />
-				</Col>
+			<Row gutter={[24, 24]} className="mt-6">
+				{laptops &&
+					laptops?.map((item, index) => (
+						<Col span={8} key={index}>
+							<LaptopItem data={item} />
+						</Col>
+					))}
 			</Row>
-
-			<Row gutter={[24, 24]}>
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-
-				<Col span={8}>
-					<LaptopItem />
-				</Col>
-			</Row>
-
-			{laptops && laptops?.map((item, index) => <LaptopItem data={item} key={index} />)}
 		</div>
 	);
 };

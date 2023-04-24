@@ -1,11 +1,10 @@
+import MainLayout from '../layouts/MainLayout/MainLayout';
 import HomePage from '../modules/Home';
 import Head from 'next/head';
 
 export default function Home() {
-	// const theme = useThemeContext();
-
 	return (
-		<>
+		<MainLayout>
 			<Head>
 				<title>Laptop Shop</title>
 				<meta
@@ -17,14 +16,6 @@ export default function Home() {
 			</Head>
 
 			<HomePage />
-
-			{/* <Row style={{ padding: 30, backgroundColor: `#e9e9e9` }}>
-				<ThemeToggle />
-
-				<div className="flex grow items-center justify-center text-6xl font-bold">
-					{theme === 'dark' ? 'FaMoon' : 'FaSun'}
-				</div>
-			</Row> */}
-		</>
+		</MainLayout>
 	);
 }

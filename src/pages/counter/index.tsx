@@ -1,15 +1,21 @@
+import MainLayout from '@/src/layouts/MainLayout/MainLayout';
 import { useAppDispatch, useAppSelector } from '@/src/redux/hooks';
-import { decrement, increment, incrementByAmount, selectCount } from '@/src/redux/slices/counterSlice';
+import {
+	decrement,
+	increment,
+	incrementByAmount,
+	selectCount,
+} from '@/src/redux/slices/counterSlice';
 import { useState } from 'react';
 
 const CounterPage: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const count = useAppSelector(selectCount);
-	
+
 	const [incrementAmount, setIncrementAmount] = useState<number>(0);
 
 	return (
-		<>
+		<MainLayout>
 			<h1>Welcome to the greatest app in the world!</h1>
 			<h2>{`The current number is ${count}`}</h2>
 			<div>
@@ -26,7 +32,7 @@ const CounterPage: React.FC = () => {
 				<button onClick={() => dispatch(decrement())}>Decrement by 1</button>
 				<button onClick={() => dispatch(increment())}>Increment by 1</button>
 			</div>
-		</>
+		</MainLayout>
 	);
 };
 
