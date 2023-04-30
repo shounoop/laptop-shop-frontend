@@ -4,8 +4,9 @@ import { ThemeContextProvider } from '../contexts/theme-context'
 import { Provider } from 'react-redux'
 import { store } from '../redux/store'
 import MainLayout from '../layouts/MainLayout'
+import dynamic from 'next/dynamic'
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <ThemeContextProvider>
@@ -16,3 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
     </Provider>
   )
 }
+
+export default dynamic(() => Promise.resolve(App), {
+  ssr: false
+})
