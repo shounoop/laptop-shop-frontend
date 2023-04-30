@@ -1,12 +1,7 @@
-import MainLayout from '@/src/layouts/MainLayout/MainLayout';
-import PaymentModule from '@/src/modules/PaymentModule';
+import PaymentModule from '@/src/modules/PaymentModule'
 
 const PaymentPage = () => {
-	return (
-		<MainLayout>
-			<PaymentModule />
-		</MainLayout>
-	);
-};
+  return <PaymentModule />
+}
 
-export default PaymentPage;
+export default PaymentPage
