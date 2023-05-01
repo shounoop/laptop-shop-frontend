@@ -1,5 +1,7 @@
 import { Button, Title } from '@/src/components'
 import mainAxios from '@/src/libs/main-axios'
+import { useAppSelector } from '@/src/redux/hooks'
+import { formatPriceVND } from '@/src/utils/format-price'
 import { Col, Row, Select, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useRouter } from 'next/router'
@@ -9,7 +11,7 @@ interface DataType {
   name: string
   unitPrice: string
   quantity: number
-  total: number
+  delivery: number
 }
 
 const TAX = 1.07
@@ -18,16 +20,34 @@ const ProductModule: React.FC = () => {
   // useRouter
   const router = useRouter()
 
+  // store
+  const productsInCart = useAppSelector(state => state.cart.productsInCard)
+
   // useState
-  const [total, setTotal] = useState(32.11)
+  const [delivery, setDelivery] = useState<number>(0)
   const [provinces, setProvinces] = useState()
   const [districts, setDistricts] = useState()
   const [wards, setWards] = useState()
   const [provinceId, setProvinceId] = useState<number>()
   const [districtId, setDistrictId] = useState<number>()
   const [wardCode, setWardCode] = useState<string>()
+  const [records, setRecords] = useState<DataType[]>()
+  const [totalCost, setTotalCost] = useState<number>()
 
   // useEffect
+  useEffect(() => {
+    if (!productsInCart) return
+
+    const mappedRecords: DataType[] = productsInCart.map((item: any) => ({
+      name: item.productName,
+      unitPrice: `${item.price}$`,
+      quantity: item.amount,
+      delivery: `${item.price * item.amount}$`
+    }))
+
+    setRecords(mappedRecords)
+  }, [productsInCart])
+
   useEffect(() => {
     ;(async () => {
       try {
@@ -87,17 +107,36 @@ const ProductModule: React.FC = () => {
     })()
   }, [districtId, provinceId])
 
+  useEffect(() => {
+    let currentTotalCost = 0
+
+    productsInCart.map((item: any) => {
+      currentTotalCost += item?.amount * item?.price
+    })
+
+    if (delivery) {
+      currentTotalCost += delivery
+    }
+
+    if (currentTotalCost) {
+      setTotalCost(currentTotalCost)
+    }
+  }, [delivery, productsInCart])
+
+  console.log('totalCost', totalCost)
+
   // functions
-  const handleDeleteItem = () => {
+  const handleDeleteItem = (record: any) => {
+    console.log(record)
     return null
   }
 
   const handlePayment = () => {
     ;(async () => {
       const payload = {
-        total,
+        delivery,
         details: {
-          subtotal: 31.0,
+          subdelivery: 31.0,
           tax: TAX,
           shipping: 0.03,
           handling_fee: 1.0,
@@ -133,7 +172,7 @@ const ProductModule: React.FC = () => {
     setWardCode(value)
   }
 
-  const costCalculationHandler = async () => {
+  const orderHandler = async () => {
     if (!wardCode) return
 
     try {
@@ -161,56 +200,60 @@ const ProductModule: React.FC = () => {
     }
   }
 
-  // data of table
+  const costCalculationHandler = async () => {
+    if (!districtId || !wardCode) return
+
+    try {
+      const payload = {
+        districtId,
+        wardCode
+      }
+
+      const res: any = await mainAxios.post(
+        `http://localhost:3004/delivery`,
+        payload
+      )
+
+      setDelivery(res?.fee || 0)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // columns of table
   const columns: ColumnsType<DataType> = [
     {
-      title: 'Name',
+      title: 'Tên',
       dataIndex: 'name',
-      render: text => <a>{text}</a>
+      render: (_, record) => <Title level={3} text={record.name} />
     },
     {
       title: 'Đơn giá',
-      dataIndex: 'unitPrice'
+      dataIndex: 'unitPrice',
+      render: (_, record) => <Title level={5} text={record.unitPrice} />
     },
     {
       title: 'Số lượng',
-      dataIndex: 'quantity'
+      dataIndex: 'quantity',
+      render: (_, record) => <Title level={5} text={record.quantity} />
     },
     {
       title: 'Số tiền',
-      dataIndex: 'total'
+      dataIndex: 'delivery',
+      render: (_, record) => (
+        <Title level={5} className="text-primary" text={record.delivery} />
+      )
     },
     {
       title: 'Thao tác',
       render: (_, record) => (
         <div
-          onClick={handleDeleteItem}
+          onClick={() => handleDeleteItem(record)}
           className="cursor-pointer hover:[&>*]:text-blue-500"
         >
           <Title text={'Xóa'} level={5} isNormal />
         </div>
       )
-    }
-  ]
-
-  const records: DataType[] = [
-    {
-      name: 'John Brown',
-      unitPrice: 'New York No. 1 Lake Park',
-      quantity: 1,
-      total: 100
-    },
-    {
-      name: 'Jim Green',
-      unitPrice: 'London No. 1 Lake Park',
-      quantity: 1,
-      total: 100
-    },
-    {
-      name: 'Joe Black',
-      unitPrice: 'Sydney No. 1 Lake Park',
-      quantity: 1,
-      total: 100
     }
   ]
 
@@ -278,44 +321,56 @@ const ProductModule: React.FC = () => {
         <Col>
           <Button
             type="primary"
-            text="Tính toán chi phí"
+            text="Tính phí vận chuyển"
             onClick={costCalculationHandler}
           />
         </Col>
       </Row>
 
-      <Row gutter={24} align={'middle'} className="mt-10" justify={'end'}>
-        <Col>
-          <Row align={'middle'} gutter={16}>
-            <Col>
-              <Title
-                level={4}
-                isNormal
-                text={`Tổng thanh toán (3 sản phẩm):`}
-              />
-            </Col>
+      {delivery && totalCost && (
+        <Row gutter={24} align={'middle'} className="mt-10" justify={'end'}>
+          <Col>
+            <Row align={'middle'} gutter={16}>
+              <Col>
+                <Title
+                  level={4}
+                  isNormal
+                  text={`Tổng thanh toán (${productsInCart.length} sản phẩm):`}
+                />
+              </Col>
 
-            <Col>
-              <Title
-                className="text-primary"
-                level={3}
-                isNormal
-                text={`26.999 VNĐ`}
-              />
-            </Col>
-          </Row>
-        </Col>
+              <Col>
+                <Title
+                  className="text-primary"
+                  level={3}
+                  isNormal
+                  text={`${formatPriceVND(totalCost)}$`}
+                />
+              </Col>
+            </Row>
+          </Col>
 
-        <Col>
-          <Button
-            onClick={handlePayment}
-            size="large"
-            type="primary"
-            text="Mua hàng"
-            className="min-w-[200px]"
-          />
-        </Col>
-      </Row>
+          <Col>
+            <Button
+              onClick={handlePayment}
+              size="large"
+              type="primary"
+              text="Mua hàng"
+              className="min-w-[200px]"
+            />
+          </Col>
+
+          <Col>
+            <Button
+              onClick={orderHandler}
+              size="large"
+              type="primary"
+              text="Đặt hàng"
+              className="min-w-[200px]"
+            />
+          </Col>
+        </Row>
+      )}
     </div>
   )
 }

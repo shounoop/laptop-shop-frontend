@@ -1,18 +1,62 @@
 /* eslint-disable @next/next/no-img-element */
 import { Button, Title } from '@/src/components'
-import { Col, Input, Row } from 'antd'
+import { Col, Input, Row, message } from 'antd'
 import Reputation from './Reputation/Reputation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import PATH from '@/src/shared/path'
+import { useRouter } from 'next/router'
+import { useAppDispatch } from '@/src/redux/hooks'
+import { addProduct } from '@/src/redux/slices/cartSlice'
+import mainAxios from '@/src/libs/main-axios'
 
 const ProductModule: React.FC = () => {
+  // useRouter
+  const router = useRouter()
+  const productId = router.query.id
+
+  // store
+  const dispatch = useAppDispatch()
+
   // useState
-  const [quantity, setQuantity] = useState(1)
+  const [amount, setAmount] = useState(1)
+  const [product, setProduct] = useState<any>()
+
+  // useEffect
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const res: any = await mainAxios.get(
+          `http://localhost:3004/products/${productId}`
+        )
+
+        setProduct(res)
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }, [])
 
   // functions
   const onChangeQuantity = (e: any) => {
-    setQuantity(Number(e.target.value))
+    setAmount(Number(e.target.value))
+  }
+
+  const addingToCart = () => {
+    if (!product) return
+
+    dispatch(
+      addProduct({
+        productId,
+        amount,
+        productName: product.productName,
+        type: product.type,
+        price: product.price,
+        description: product.description
+      })
+    )
+
+    message.success('Thêm vào giỏ hàng thành công')
   }
 
   return (
@@ -27,7 +71,7 @@ const ProductModule: React.FC = () => {
       <Row gutter={24} className="mt-6">
         <Col span={6}>
           <img
-            src="https://laptopworld.vn/media/product/9152_lenovo_ip_1_11igl05__7.jpg"
+            src={product?.photoUrl}
             alt="laptop"
             className="h-[200px] w-full object-contain"
           />
@@ -35,7 +79,10 @@ const ProductModule: React.FC = () => {
 
         <Col span={9}>
           <div>
-            <Title className="text-primary" text={`Deal: 19.890.000`} />
+            <Title
+              className="italic text-primary"
+              text={`Deal: ${product?.price}$`}
+            />
           </div>
 
           <Row className="mt-4">
@@ -61,7 +108,7 @@ const ProductModule: React.FC = () => {
               <Title
                 level={5}
                 className="font-normal"
-                text={`4353 sản phẩm có sẵn`}
+                text={`${product?.quantity} sản phẩm có sẵn`}
               />
             </Col>
           </Row>
@@ -73,7 +120,7 @@ const ProductModule: React.FC = () => {
 
             <Col>
               <Input
-                value={quantity}
+                value={amount}
                 onChange={onChangeQuantity}
                 size="small"
                 className="min-w-fit max-w-[60px] px-4 py-1"
@@ -93,6 +140,7 @@ const ProductModule: React.FC = () => {
                 size="large"
                 text="Thêm vào giỏ hàng"
                 className="w-full"
+                onClick={addingToCart}
               />
             </Col>
 
