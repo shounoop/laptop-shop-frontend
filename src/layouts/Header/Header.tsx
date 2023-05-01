@@ -10,8 +10,9 @@ import {
   getIsAuthenticated,
   setIsAuthenticated
 } from '@/src/redux/slices/authSlice'
-import { Button, LoginModal } from '@/src/components'
-import { UserOutlined } from '@ant-design/icons'
+import { Button, LoginModal, Title } from '@/src/components'
+import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons'
+import Link from 'next/link'
 
 const Header: React.FC = () => {
   // store
@@ -78,16 +79,40 @@ const Header: React.FC = () => {
         {isAuthenticated && (
           <Col className="mr-[-30px]">
             <Tooltip
+              // trigger={'click'}
               arrow={false}
               overlayInnerStyle={{ background: `white` }}
               className="mr-4"
               placement="bottomLeft"
               overlay={
-                <Button
-                  onClick={handleLogout}
-                  className="mr-4"
-                  text="Sign out"
-                />
+                <div>
+                  <Link href={PATH.ORDERS}>
+                    {/* <Row className="rounded px-2 py-2 hover:bg-slate-200"> */}
+                    <Row
+                      gutter={8}
+                      align={'middle'}
+                      className="rounded px-2 py-2 hover:bg-slate-100"
+                    >
+                      <Col>
+                        <Row align={'middle'}>
+                          <ShoppingCartOutlined style={{ color: `black` }} />
+                        </Row>
+                      </Col>
+
+                      <Col>
+                        <Title level={5} isNormal text={`Các đơn đặt hàng`} />
+                      </Col>
+                    </Row>
+                  </Link>
+
+                  <div className="mt-2">
+                    <Button
+                      onClick={handleLogout}
+                      className="w-full"
+                      text="Sign out"
+                    />
+                  </div>
+                </div>
               }
             >
               <Row>
