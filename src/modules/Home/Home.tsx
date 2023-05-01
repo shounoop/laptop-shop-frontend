@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import mainAxios from '@/src/libs/main-axios';
 import { Button, Title } from '@/src/components';
 import { Col, Input, Row, Select, SelectProps } from 'antd';
-import LaptopItem from './components/LaptopItem';
+import LaptopItem from './LaptopItem';
 
 const HomePage: React.FC = () => {
 	const [laptops, setLaptops] = useState<any[]>();
