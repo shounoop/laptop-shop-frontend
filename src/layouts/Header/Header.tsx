@@ -41,7 +41,7 @@ const Header: React.FC = () => {
     } else {
       dispatch(setIsAuthenticated(false))
     }
-  }, [])
+  }, [dispatch])
 
   return (
     <>
