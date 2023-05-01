@@ -85,7 +85,7 @@ const Header: React.FC = () => {
               className="mr-4"
               placement="bottomLeft"
               overlay={
-                <div>
+                <div className='p-2'>
                   <Link href={PATH.ORDERS}>
                     {/* <Row className="rounded px-2 py-2 hover:bg-slate-200"> */}
                     <Row
@@ -118,7 +118,7 @@ const Header: React.FC = () => {
               <Row>
                 <Col className="mr-2">
                   <Row align={'middle'} className="h-full">
-                    <Typography>Username</Typography>
+                    {/* <Typography>Username</Typography> */}
                   </Row>
                 </Col>
 
