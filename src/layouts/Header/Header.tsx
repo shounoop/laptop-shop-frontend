@@ -56,6 +56,8 @@ const Header: React.FC = () => {
             <TabItem href={PATH.HOME} title="LAPTOP SHOP" isHome />
             <TabItem href={PATH.CART} title="Xem giỏ hàng" />
             <TabItem href={PATH.ORDERS} title="Các đơn đặt hàng" />
+            <TabItem href={`#`} title="Tư vấn khách hàng" />
+            <TabItem href={`#`} title="Flash sale" />
           </Row>
         </Col>
 
@@ -84,7 +86,7 @@ const Header: React.FC = () => {
               arrow={false}
               overlayInnerStyle={{ background: `white` }}
               className="mr-4"
-              placement="bottomLeft"
+              placement="bottomRight"
               overlay={
                 <div className="p-2">
                   <Link href={PATH.ORDERS}>
@@ -116,10 +118,10 @@ const Header: React.FC = () => {
                 </div>
               }
             >
-              <Row>
+              <Row align={'middle'}>
                 <Col className="mr-2">
                   <Row align={'middle'} className="h-full">
-                    {/* <Typography>Username</Typography> */}
+                    <Title isNormal level={5} text={'Hoang Tuan'} />
                   </Row>
                 </Col>
 
