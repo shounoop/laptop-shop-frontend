@@ -24,6 +24,8 @@ const ProductModule: React.FC = () => {
 
   // useEffect
   useEffect(() => {
+    if (!productId) return
+
     ;(async () => {
       try {
         const res: any = await mainAxios.get(
@@ -35,7 +37,7 @@ const ProductModule: React.FC = () => {
         console.log(error)
       }
     })()
-  }, [])
+  }, [productId])
 
   // functions
   const onChangeQuantity = (e: any) => {

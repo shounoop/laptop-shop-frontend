@@ -327,7 +327,7 @@ const ProductModule: React.FC = () => {
         </Col>
       </Row>
 
-      {delivery && totalCost && (
+      {(delivery && totalCost && (
         <Row gutter={24} align={'middle'} className="mt-10" justify={'end'}>
           <Col>
             <Row align={'middle'} gutter={16}>
@@ -370,7 +370,8 @@ const ProductModule: React.FC = () => {
             />
           </Col>
         </Row>
-      )}
+      )) ||
+        null}
     </div>
   )
 }

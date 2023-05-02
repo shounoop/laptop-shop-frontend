@@ -1,85 +1,146 @@
-import mainAxios from '@/src/libs/main-axios';
-import { Button, Input, Modal } from 'antd';
-import { useState } from 'react';
-import { setCookie } from '@/src/utils/cookie';
-import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key';
-import { isAuthenticatedJwt } from '@/src/utils/jwt';
-import { useAppDispatch } from '@/src/redux/hooks';
-import { setIsAuthenticated } from '@/src/redux/slices/authSlice';
+import mainAxios from '@/src/libs/main-axios'
+import { Col, Divider, Input, Modal, Row, message } from 'antd'
+import { useState } from 'react'
+import { setCookie } from '@/src/utils/cookie'
+import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key'
+import { isAuthenticatedJwt } from '@/src/utils/jwt'
+import { useAppDispatch } from '@/src/redux/hooks'
+import { setIsAuthenticated } from '@/src/redux/slices/authSlice'
+import Title from '../Title'
+import Button from '../Button'
 
 interface LoginRes {
-	access_token?: string | any;
-	expires_in?: number | any;
-	scope?: string | any;
-	token_type?: string | any;
+  access_token?: string | any
+  expires_in?: number | any
+  scope?: string | any
+  token_type?: string | any
 }
 
 interface Props {
-	visible?: boolean;
-	setVisible: (value: boolean) => void;
+  visible?: boolean
+  setVisible: (value: boolean) => void
 }
 
-const LoginModal: React.FC<Props> = (props) => {
-	const { visible = false, setVisible } = props;
+const LoginModal: React.FC<Props> = props => {
+  const { visible = false, setVisible } = props
 
-	const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-	const [username, setUsername] = useState('phungtanminh01+2@gmail.com');
-	const [password, setPassword] = useState('Minh12345@');
+  const [email, setEmail] = useState('phungtanminh01+2@gmail.com')
+  const [password, setPassword] = useState('Minh12345@')
 
-	const handleOk = () => {
-		setVisible(false);
-	};
+  const handleOk = () => {
+    setVisible(false)
+  }
 
-	const handleCancel = () => {
-		setVisible(false);
-	};
+  const handleCancel = () => {
+    setVisible(false)
+  }
 
-	const handleLogin = () => {
-		(async () => {
-			try {
-				const res: LoginRes = await mainAxios.post(`http://localhost:3002/users/login`, {
-					username,
-					password,
-				});
+  const handleLogin = () => {
+    ;(async () => {
+      try {
+        const res: LoginRes = await mainAxios.post(
+          `http://localhost:3002/users/login`,
+          {
+            username: email,
+            password
+          }
+        )
 
-				if (res?.access_token) {
-					const token = res.access_token;
+        if (res?.access_token) {
+          const token = res.access_token
 
-					setCookie(LOCAL_STORAGE_KEY.TOKEN, token, 365);
+          setCookie(LOCAL_STORAGE_KEY.TOKEN, token, 365)
 
-					if (isAuthenticatedJwt(token)) {
-						dispatch(setIsAuthenticated(true));
-						setVisible(false);
-					}
-				}
-			} catch (error) {
-				console.log(error);
-			}
-		})();
-	};
+          if (isAuthenticatedJwt(token)) {
+            dispatch(setIsAuthenticated(true))
+            setVisible(false)
 
-	return (
-		<Modal title="Login" open={visible} onOk={handleOk} onCancel={handleCancel} footer={null}>
-			<Input
-				placeholder="Username"
-				value={username}
-				onChange={(e) => setUsername(e.target.value)}
-				style={{ marginTop: 10 }}
-			/>
+            message.success(`Đăng nhập thành công`)
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }
 
-			<Input.Password
-				placeholder="Password"
-				style={{ marginTop: 8, marginBottom: 10 }}
-				value={password}
-				onChange={(e) => setPassword(e.target.value)}
-			/>
+  return (
+    <Modal
+      title={<Title level={3} text={`Đăng nhập`} />}
+      open={visible}
+      onOk={handleOk}
+      onCancel={handleCancel}
+      footer={null}
+    >
+      <div className="py-6">
+        <div>
+          <Title level={5} text={`Email`} />
+          <Input
+            placeholder="Email của bạn..."
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            style={{ marginTop: 10 }}
+          />
+        </div>
 
-			<Button type="primary" onClick={handleLogin}>
-				Login
-			</Button>
-		</Modal>
-	);
-};
+        <div className="mt-4">
+          <Title level={5} text={`Mật khẩu`} />
+          <Input.Password
+            placeholder="Mật khẩu của bạn"
+            style={{ marginTop: 8, marginBottom: 10 }}
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
 
-export default LoginModal;
+        <Button
+          size="large"
+          type="secondary"
+          className="mt-4 w-full"
+          onClick={handleLogin}
+          text="Đăng nhập"
+        />
+
+        <Divider>Hoặc</Divider>
+
+        <Row gutter={16}>
+          <Col
+            className="cursor-pointer"
+            span={12}
+            onClick={() =>
+              (window.location.href = process.env
+                .NEXT_PUBLIC_LOGIN_GOOGLE as string)
+            }
+          >
+            <Row
+              justify={'center'}
+              className="rounded-lg bg-slate-100 px-4 py-3"
+            >
+              <Title level={5} text={`Đăng nhập bằng Google`} />
+            </Row>
+          </Col>
+
+          <Col
+            span={12}
+            className="cursor-pointer"
+            onClick={() =>
+              (window.location.href = process.env
+                .NEXT_PUBLIC_LOGIN_FACEBOOK as string)
+            }
+          >
+            <Row
+              justify={'center'}
+              className="rounded-lg bg-slate-100 px-4 py-3"
+            >
+              <Title level={5} text={`Đăng nhập bằng Facebook`} />
+            </Row>
+          </Col>
+        </Row>
+      </div>
+    </Modal>
+  )
+}
+
+export default LoginModal
