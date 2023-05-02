@@ -66,6 +66,13 @@ const LoginModal: React.FC<Props> = props => {
     })()
   }
 
+  const loginGoogleHandler = async () => {
+    try {
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Modal
       title={<Title level={3} text={`Đăng nhập`} />}
@@ -115,6 +122,7 @@ const LoginModal: React.FC<Props> = props => {
             }
           >
             <Row
+              onClick={loginGoogleHandler}
               justify={'center'}
               className="rounded-lg bg-slate-100 px-4 py-3"
             >
