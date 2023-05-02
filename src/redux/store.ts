@@ -8,7 +8,7 @@ export const store = configureStore({
     // This is where we add reducers.
     counter: counterReducer,
     auth: authReducer,
-    cart: cartReducer
+    cart: cartReducer,
   }
 })
 

@@ -1,48 +1,42 @@
 import { Button, Title } from '@/src/components'
 import mainAxios from '@/src/libs/main-axios'
-import { useAppSelector } from '@/src/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/src/redux/hooks'
+import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key'
 import { formatPriceVND } from '@/src/utils/format-price'
-import { Col, Row, Select, Table } from 'antd'
+import { setLocalStorageItem } from '@/src/utils/local-storage'
+import { Col, Row, Select, Table, message } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
 interface DataType {
   id: string
-  deliveryFee: string
+  deliveryFee: number
   quantity: number
-  totalCost: string
+  totalCost: number
   isPaid: number
+  subTotal: number
 }
-
-const TAX = 1.07
 
 const OrderModule: React.FC = () => {
   // useRouter
   const router = useRouter()
 
   // store
-  const productsInCart = useAppSelector(state => state.cart.productsInCard)
+  const dispatch = useAppDispatch()
 
   // useState
-  const [delivery, setDelivery] = useState<number>(0)
-  const [provinces, setProvinces] = useState()
-  const [districts, setDistricts] = useState()
-  const [wards, setWards] = useState()
-  const [provinceId, setProvinceId] = useState<number>()
-  const [districtId, setDistrictId] = useState<number>()
-  const [wardCode, setWardCode] = useState<string>()
   const [records, setRecords] = useState<DataType[]>()
-  const [totalCost, setTotalCost] = useState<number>()
-
   const [orders, setOrders] = useState<any[]>()
+  const [userId] = useState(`01GWERG71ZWADVFBEZ990353K3`)
 
   // useEffect
   useEffect(() => {
+    if (!userId) return
     ;(async () => {
       try {
         const res: any = await mainAxios.get(
-          `http://localhost:3004/carts?userId=01GVVY9F8ST69VPZEBBM13XPQR`
+          `http://localhost:3004/carts?userId=${userId}`
         )
 
         setOrders(res)
@@ -50,7 +44,7 @@ const OrderModule: React.FC = () => {
         console.log(error)
       }
     })()
-  }, [])
+  }, [userId])
 
   useEffect(() => {
     if (!orders) return
@@ -68,10 +62,11 @@ const OrderModule: React.FC = () => {
 
       return {
         id: item.cartId,
-        deliveryFee: `${formatPriceVND(item.deliverFee.fee)}$`,
+        deliveryFee: item.deliverFee.fee,
         quantity: item.productsInCard.length,
-        totalCost: `${formatPriceVND(calculatedTotalCost)}$`,
-        isPaid: item.isPaid
+        totalCost: calculatedTotalCost,
+        isPaid: item.isPaid,
+        subTotal: calculatedTotalCost - item.deliverFee.fee
       }
     })
 
@@ -79,22 +74,30 @@ const OrderModule: React.FC = () => {
   }, [orders])
 
   // functions
-  const handleDeleteItem = (record: any) => {
-    console.log(record)
+  const handleDeleteItem = async (record: any) => {
+    if (!record?.id) return
+
+    try {
+      await mainAxios.delete(`http://localhost:3004/carts/${record.id}`)
+
+      router.reload()
+    } catch (error) {
+      console.log(error)
+    }
     return null
   }
 
-  const handlePayment = () => {
-    ;(async () => {
+  const handlePayment = async (record: DataType) => {
+    try {
       const payload = {
-        delivery,
+        total: record.totalCost,
         details: {
-          subdelivery: 31.0,
-          tax: TAX,
-          shipping: 0.03,
-          handling_fee: 1.0,
-          shipping_discount: -1.0,
-          insurance: 0.01
+          subtotal: record.subTotal,
+          tax: 0.0,
+          shipping: record.deliveryFee,
+          handling_fee: 0.0,
+          shipping_discount: 0.0,
+          insurance: 0.0
         }
       }
 
@@ -103,11 +106,21 @@ const OrderModule: React.FC = () => {
         payload
       )
 
+      setLocalStorageItem(
+        LOCAL_STORAGE_KEY.PAYING_CART_ID,
+        JSON.stringify(record.id)
+      )
+
       if (res?.links?.[1]) {
-        console.log(res?.links?.[1])
+        setLocalStorageItem(
+          LOCAL_STORAGE_KEY.PAYMENT,
+          JSON.stringify(res.links)
+        )
         router.replace(res?.links?.[1].href)
       }
-    })()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   // columns of table
@@ -120,7 +133,9 @@ const OrderModule: React.FC = () => {
     {
       title: 'Phí vận chuyển',
       dataIndex: 'deliveryFee',
-      render: (_, record) => <Title level={5} text={record.deliveryFee} />
+      render: (_, record) => (
+        <Title level={5} text={`${formatPriceVND(record.deliveryFee)}$`} />
+      )
     },
     {
       title: 'Số lượng sản phẩm',
@@ -131,7 +146,11 @@ const OrderModule: React.FC = () => {
       title: 'Tổng tiền',
       dataIndex: 'totalCost',
       render: (_, record) => (
-        <Title level={5} className="text-primary" text={record.totalCost} />
+        <Title
+          level={5}
+          className="text-primary"
+          text={`${formatPriceVND(record.totalCost)}$`}
+        />
       )
     },
     {
@@ -140,7 +159,7 @@ const OrderModule: React.FC = () => {
       render: (_, record) => (
         <Title
           level={5}
-          className="text-primary"
+          className={record.isPaid ? 'text-success' : 'text-primary'}
           text={record.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}
         />
       )
@@ -148,23 +167,25 @@ const OrderModule: React.FC = () => {
     {
       title: 'Thao tác',
       render: (_, record) => (
-        <Row gutter={16}>
+        <>
           {!record?.isPaid && (
-            <Col
-              onClick={() => handleDeleteItem(record)}
-              className="cursor-pointer hover:[&>*]:text-blue-500"
-            >
-              <Button type="primary" text="Thanh toán" />
-            </Col>
-          )}
+            <Row gutter={16}>
+              <Col
+                onClick={() => handlePayment(record)}
+                className="cursor-pointer"
+              >
+                <Button type="primary" text="Thanh toán" />
+              </Col>
 
-          <Col
-            onClick={() => handleDeleteItem(record)}
-            className="cursor-pointer hover:[&>*]:text-blue-500"
-          >
-            <Button text="Hủy" />
-          </Col>
-        </Row>
+              <Col
+                onClick={() => handleDeleteItem(record)}
+                className="cursor-pointer"
+              >
+                <Button text="Hủy" />
+              </Col>
+            </Row>
+          )}
+        </>
       )
     }
   ]
