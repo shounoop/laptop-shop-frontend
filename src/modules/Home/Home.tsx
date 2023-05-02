@@ -1,81 +1,89 @@
-import { useEffect, useState } from 'react';
-import mainAxios from '@/src/libs/main-axios';
-import { Button, Title } from '@/src/components';
-import { Col, Input, Row, Select, SelectProps } from 'antd';
-import LaptopItem from './LaptopItem';
+import { useEffect, useState } from 'react'
+import mainAxios from '@/src/libs/main-axios'
+import { Button, Title } from '@/src/components'
+import { Col, Input, Row, Select, SelectProps } from 'antd'
+import LaptopItem from './LaptopItem'
 
 const HomePage: React.FC = () => {
-	const [laptops, setLaptops] = useState<any[]>();
+  // useState
+  const [laptops, setLaptops] = useState<any[]>()
+  const [searchKey, setSearchKey] = useState<string>('')
+  const [filteredLaptops, setFilteredLaptops] = useState<any[]>()
 
-	useEffect(() => {
-		(async () => {
-			try {
-				const res: any = await mainAxios.get('http://localhost:3004/products');
-				setLaptops(res);
-			} catch (error) {
-				console.log(error);
-			}
-		})();
-	}, []);
+  // useEffect
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const res: any = await mainAxios.get('http://localhost:3004/products')
 
-	// functions
+        setLaptops(res)
+        setFilteredLaptops(res)
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }, [])
 
-	// const options: SelectProps['options'] = [];
+  // functions
+  const searchHandler = async () => {
+    try {
+      const res: any = await mainAxios.get(
+        `http://localhost:3004/products?search=${searchKey || ''}`
+      )
 
-	// for (let i = 10; i < 36; i++) {
-	// 	options.push({
-	// 		value: i.toString(36) + i,
-	// 		label: i.toString(36) + i,
-	// 	});
-	// }
+      setFilteredLaptops(res)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-	return (
-		<div>
-			<Row justify={'space-between'} align={'middle'} className="my-4">
-				<Col>
-					<Title level={4} text="Tất cả sản phẩm" />
-				</Col>
+  return (
+    <div>
+      <Row justify={'space-between'} align={'middle'} className="my-4">
+        <Col>
+          <Title
+            level={4}
+            text={
+              filteredLaptops && filteredLaptops.length !== laptops?.length
+                ? 'Sản phẩm đã tìm kiếm'
+                : 'Tất cả sản phẩm'
+            }
+          />
+        </Col>
 
-				<Col>
-					<Row gutter={16} wrap={false}>
-						<Col>
-							<Input className="min-w-[300px] border-0 p-2" placeholder="Nhập tên sản phẩm..." />
-						</Col>
+        <Col>
+          <Row gutter={16} wrap={false}>
+            <Col>
+              <Input
+                className="min-w-[300px] border-0 p-2"
+                placeholder="Nhập tên sản phẩm..."
+                value={searchKey}
+                onChange={e => setSearchKey(e.target.value)}
+              />
+            </Col>
 
-						<Col>
-							<Button type="primary" className="h-full" text="Tìm kiếm" />
-						</Col>
-					</Row>
-				</Col>
+            <Col>
+              <Button
+                type="primary"
+                className="h-full"
+                text="Tìm kiếm"
+                onClick={searchHandler}
+              />
+            </Col>
+          </Row>
+        </Col>
+      </Row>
 
-				{/* <Col>
-					<Row align={'middle'} gutter={16} justify={'end'} className="mb-4">
-						<Col>
-							<Select
-								size={'middle'}
-								defaultValue="Tất cả"
-								onChange={handleChange}
-								options={options}
-							/>
-						</Col>
+      <Row gutter={[24, 24]} className="mt-6">
+        {filteredLaptops &&
+          filteredLaptops?.map((item, index) => (
+            <Col span={8} key={index}>
+              <LaptopItem data={item} />
+            </Col>
+          ))}
+      </Row>
+    </div>
+  )
+}
 
-						<Col>
-							<Button type="primary" className="min-w-[90.08px]" text="Lọc" />
-						</Col>
-					</Row>
-				</Col> */}
-			</Row>
-
-			<Row gutter={[24, 24]} className="mt-6">
-				{laptops &&
-					laptops?.map((item, index) => (
-						<Col span={8} key={index}>
-							<LaptopItem data={item} />
-						</Col>
-					))}
-			</Row>
-		</div>
-	);
-};
-
-export default HomePage;
+export default HomePage

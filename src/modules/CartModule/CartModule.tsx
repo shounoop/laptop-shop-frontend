@@ -1,6 +1,7 @@
 import { Button, Title } from '@/src/components'
 import mainAxios from '@/src/libs/main-axios'
 import { useAppSelector } from '@/src/redux/hooks'
+import PATH from '@/src/shared/path'
 import { formatPriceVND } from '@/src/utils/format-price'
 import { Col, Row, Select, Table, message } from 'antd'
 import { ColumnsType } from 'antd/es/table'
@@ -15,6 +16,9 @@ interface DataType {
 }
 
 const ProductModule: React.FC = () => {
+  // useRouter
+  const router = useRouter()
+
   // store
   const productsInCart = useAppSelector(state => state.cart.productsInCard)
 
@@ -152,12 +156,16 @@ const ProductModule: React.FC = () => {
         productsInCard: productsInCart
       }
 
-      const res: any = await mainAxios.post(
+      await mainAxios.post(
         `http://localhost:3004/carts?userId=${userId}`,
         payload
       )
 
       message.success(`Đặt hàng thành công`)
+
+      setTimeout(() => {
+        router.push(PATH.ORDERS)
+      }, 2000)
     } catch (error) {
       console.log(error)
     }

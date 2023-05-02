@@ -1,11 +1,12 @@
 import { Button, Title } from '@/src/components'
 import mainAxios from '@/src/libs/main-axios'
-import { useAppDispatch, useAppSelector } from '@/src/redux/hooks'
 import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key'
+import PATH from '@/src/shared/path'
 import { formatPriceVND } from '@/src/utils/format-price'
 import { setLocalStorageItem } from '@/src/utils/local-storage'
-import { Col, Row, Select, Table, message } from 'antd'
+import { Col, Row, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -18,12 +19,9 @@ interface DataType {
   subTotal: number
 }
 
-const OrderModule: React.FC = () => {
+const Orders: React.FC = () => {
   // useRouter
   const router = useRouter()
-
-  // store
-  const dispatch = useAppDispatch()
 
   // useState
   const [records, setRecords] = useState<DataType[]>()
@@ -128,7 +126,11 @@ const OrderModule: React.FC = () => {
     {
       title: 'ID',
       dataIndex: 'id',
-      render: (_, record) => <Title level={5} text={record.id} />
+      render: (_, record) => (
+        <Link href={`${PATH.ORDERS}/${record?.id}` || `#`}>
+          <Title level={5} text={record.id} className="hover:text-primary" />
+        </Link>
+      )
     },
     {
       title: 'Phí vận chuyển',
@@ -197,4 +199,4 @@ const OrderModule: React.FC = () => {
   )
 }
 
-export default OrderModule
+export default Orders
