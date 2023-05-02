@@ -1,10 +1,5 @@
 import { Title } from '@/src/components'
-import {
-  HomeOutlined,
-  MailFilled,
-  MailOutlined,
-  PhoneFilled
-} from '@ant-design/icons'
+import { HomeOutlined, MailOutlined, PhoneOutlined } from '@ant-design/icons'
 import { Col, Row, Typography } from 'antd'
 
 const Footer: React.FC = () => {
@@ -38,7 +33,7 @@ const Footer: React.FC = () => {
       <Row gutter={8} align={'middle'} className="mt-2">
         <Col>
           <Row align={'middle'}>
-            <PhoneFilled />
+            <PhoneOutlined />
           </Row>
         </Col>
 
