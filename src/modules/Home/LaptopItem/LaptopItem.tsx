@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Button, Title } from '@/src/components'
+import { formatPriceVND } from '@/src/utils/format-price'
 import { Col, Rate, Row } from 'antd'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -13,7 +14,7 @@ const LaptopItem: React.FC<Props> = props => {
 
   return (
     <Link href={`/product/${data?.productId}`} className="block h-full">
-      <div className="h-full group w-full overflow-hidden rounded-2xl bg-white p-6 shadow-xl">
+      <div className="group h-full w-full overflow-hidden rounded-2xl bg-white p-6 shadow-xl">
         <img
           src={data?.photoUrl}
           alt="laptop"
@@ -30,7 +31,7 @@ const LaptopItem: React.FC<Props> = props => {
               <Title
                 level={4}
                 className="text-primary"
-                text={`${data?.price}$`}
+                text={`${formatPriceVND(data?.price)} VNĐ`}
               />
             </Col>
           </Row>

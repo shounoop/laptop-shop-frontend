@@ -136,7 +136,7 @@ const Orders: React.FC = () => {
       title: 'Phí vận chuyển',
       dataIndex: 'deliveryFee',
       render: (_, record) => (
-        <Title level={5} text={`${formatPriceVND(record.deliveryFee)}$`} />
+        <Title level={5} text={`${formatPriceVND(record.deliveryFee)} VNĐ`} />
       )
     },
     {
@@ -151,7 +151,7 @@ const Orders: React.FC = () => {
         <Title
           level={5}
           className="text-primary"
-          text={`${formatPriceVND(record.totalCost)}$`}
+          text={`${formatPriceVND(record.totalCost)} VNĐ`}
         />
       )
     },

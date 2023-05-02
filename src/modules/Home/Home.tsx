@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import mainAxios from '@/src/libs/main-axios'
 import { Button, Title } from '@/src/components'
-import { Col, Input, Row, Select, SelectProps } from 'antd'
+import { Col, Input, Row } from 'antd'
 import LaptopItem from './LaptopItem'
+import DATA from './mock-data.json'
 
 const HomePage: React.FC = () => {
   // useState
   const [laptops, setLaptops] = useState<any[]>()
   const [searchKey, setSearchKey] = useState<string>('')
-  const [filteredLaptops, setFilteredLaptops] = useState<any[]>()
+  const [filteredLaptops, setFilteredLaptops] = useState<any[]>(DATA)
 
   // useEffect
   useEffect(() => {

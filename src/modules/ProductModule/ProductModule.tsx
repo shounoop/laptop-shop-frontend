@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { useAppDispatch } from '@/src/redux/hooks'
 import { addProduct } from '@/src/redux/slices/cartSlice'
 import mainAxios from '@/src/libs/main-axios'
+import { formatPriceVND } from '@/src/utils/format-price'
 
 const ProductModule: React.FC = () => {
   // useRouter
@@ -25,7 +26,6 @@ const ProductModule: React.FC = () => {
   // useEffect
   useEffect(() => {
     if (!productId) return
-
     ;(async () => {
       try {
         const res: any = await mainAxios.get(
@@ -83,7 +83,7 @@ const ProductModule: React.FC = () => {
           <div>
             <Title
               className="italic text-primary"
-              text={`Deal: ${product?.price}$`}
+              text={`Deal: ${formatPriceVND(product?.price)} VNĐ`}
             />
           </div>
 
