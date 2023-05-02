@@ -12,8 +12,8 @@ const LaptopItem: React.FC<Props> = props => {
   const { data } = props
 
   return (
-    <Link href={`/product/${data?.productId}`}>
-      <div className="group w-full overflow-hidden rounded-2xl bg-white p-6 shadow-xl">
+    <Link href={`/product/${data?.productId}`} className="block h-full">
+      <div className="h-full group w-full overflow-hidden rounded-2xl bg-white p-6 shadow-xl">
         <img
           src={data?.photoUrl}
           alt="laptop"

@@ -48,13 +48,14 @@ const Header: React.FC = () => {
       <Row
         justify={'space-between'}
         align={'middle'}
-        className="fixed top-0 z-[1] w-screen border-b-[1px] border-solid border-b-slate-200 bg-zinc-300 px-[120px] py-[42px]"
+        className="fixed top-0 z-[1] w-screen border-b-[1px] border-solid border-b-slate-200 bg-white px-[120px] py-[42px]"
+        // className="fixed top-0 z-[1] w-screen border-b-[1px] border-solid border-b-slate-200 bg-zinc-300 px-[120px] py-[42px]"
       >
         <Col className="ml-[-30px]">
           <Row align={'middle'}>
             <TabItem href={PATH.HOME} title="LAPTOP SHOP" isHome />
             <TabItem href={PATH.CART} title="Xem giỏ hàng" />
-            <TabItem href={PATH.DEMO_COMPS} title="DEMO-COMPS" />
+            <TabItem href={PATH.ORDERS} title="Các đơn đặt hàng" />
           </Row>
         </Col>
 
@@ -85,7 +86,7 @@ const Header: React.FC = () => {
               className="mr-4"
               placement="bottomLeft"
               overlay={
-                <div className='p-2'>
+                <div className="p-2">
                   <Link href={PATH.ORDERS}>
                     {/* <Row className="rounded px-2 py-2 hover:bg-slate-200"> */}
                     <Row
