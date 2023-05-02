@@ -86,7 +86,7 @@ const OrderDetail: React.FC = () => {
       title: 'Đơn giá',
       dataIndex: 'price',
       render: (_, record) => (
-        <Title level={5} text={`${formatPriceVND(record.price)}$`} />
+        <Title level={5} text={`${formatPriceVND(record.price)} VNĐ`} />
       )
     },
     {
@@ -101,7 +101,7 @@ const OrderDetail: React.FC = () => {
         <Title
           level={5}
           className="text-primary"
-          text={`${formatPriceVND(record.total)}$`}
+          text={`${formatPriceVND(record.total)} VNĐ`}
         />
       )
     }
@@ -205,7 +205,7 @@ const OrderDetail: React.FC = () => {
               <Title
                 level={4}
                 isNormal
-                text={`${formatPriceVND(order?.deliverFee?.fee)}$` || '3500$'}
+                text={`${formatPriceVND(order?.deliverFee?.fee)} VNĐ` || '3500$'}
               />
             </Col>
           </Row>
@@ -222,7 +222,7 @@ const OrderDetail: React.FC = () => {
                 level={4}
                 isNormal
                 className="text-primary"
-                text={`${formatPriceVND(totalCost)}$` || '3500$'}
+                text={`${formatPriceVND(totalCost)} VNĐ` || '3500$'}
               />
             </Col>
           </Row>

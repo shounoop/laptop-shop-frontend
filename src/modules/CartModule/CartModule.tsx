@@ -40,9 +40,9 @@ const ProductModule: React.FC = () => {
 
     const mappedRecords: DataType[] = productsInCart.map((item: any) => ({
       name: item.productName,
-      unitPrice: `${item.price}$`,
+      unitPrice: item.price,
       quantity: item.amount,
-      delivery: `${item.price * item.amount}$`
+      delivery: item.price * item.amount
     }))
 
     setRecords(mappedRecords)
@@ -201,7 +201,7 @@ const ProductModule: React.FC = () => {
     {
       title: 'Đơn giá',
       dataIndex: 'unitPrice',
-      render: (_, record) => <Title level={5} text={record.unitPrice} />
+      render: (_, record) => <Title level={5} text={`${formatPriceVND(record.unitPrice)} VNĐ`} />
     },
     {
       title: 'Số lượng',
@@ -212,7 +212,7 @@ const ProductModule: React.FC = () => {
       title: 'Số tiền',
       dataIndex: 'delivery',
       render: (_, record) => (
-        <Title level={5} className="text-primary" text={record.delivery} />
+        <Title level={5} className="text-primary" text={`${formatPriceVND(record.delivery)} VNĐ`} />
       )
     },
     {
@@ -315,7 +315,7 @@ const ProductModule: React.FC = () => {
                   className="text-primary"
                   level={3}
                   isNormal
-                  text={`${formatPriceVND(totalCost)}$`}
+                  text={`${formatPriceVND(totalCost)} VNĐ`}
                 />
               </Col>
             </Row>
