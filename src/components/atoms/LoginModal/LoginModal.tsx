@@ -5,15 +5,18 @@ import { setCookie } from '@/src/utils/cookie'
 import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key'
 import { isAuthenticatedJwt } from '@/src/utils/jwt'
 import { useAppDispatch } from '@/src/redux/hooks'
-import { setIsAuthenticated } from '@/src/redux/slices/authSlice'
+import { UserInfo, setIsAuthenticated } from '@/src/redux/slices/authSlice'
 import Title from '../Title'
 import Button from '../Button'
+import { setLocalStorageItem } from '@/src/utils/local-storage'
+import COOKIE_KEY from '@/src/shared/cookie-key'
 
 interface LoginRes {
   access_token?: string | any
   expires_in?: number | any
   scope?: string | any
   token_type?: string | any
+  payload?: UserInfo
 }
 
 interface Props {
@@ -51,7 +54,7 @@ const LoginModal: React.FC<Props> = props => {
         if (res?.access_token) {
           const token = res.access_token
 
-          setCookie(LOCAL_STORAGE_KEY.TOKEN, token, 365)
+          setCookie(COOKIE_KEY.TOKEN, token, 365)
 
           if (isAuthenticatedJwt(token)) {
             dispatch(setIsAuthenticated(true))
@@ -59,6 +62,13 @@ const LoginModal: React.FC<Props> = props => {
 
             message.success(`Đăng nhập thành công`)
           }
+        }
+
+        if (res?.payload) {
+          setLocalStorageItem(
+            LOCAL_STORAGE_KEY.USER_INFO,
+            JSON.stringify(res.payload)
+          )
         }
       } catch (error) {
         console.log(error)

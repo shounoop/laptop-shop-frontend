@@ -1,8 +1,8 @@
+import { Button } from '@/src/components'
 import mainAxios from '@/src/libs/main-axios'
-import { useAppSelector } from '@/src/redux/hooks'
 import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key'
 import { getLocalStorageItem, jsonParser } from '@/src/utils/local-storage'
-import { Button, Result, message } from 'antd'
+import { Result, Spin, message } from 'antd'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
@@ -14,6 +14,7 @@ const PaymentModule: React.FC = () => {
   const [links, setLinks] = useState<any>()
   const [isPaid, setIsPaid] = useState(false)
   const [payingCartId, setPayingCartId] = useState<string>()
+  const [isConfirming, setIsConfirming] = useState(false)
 
   useEffect(() => {
     const linksHere = getLocalStorageItem(LOCAL_STORAGE_KEY.PAYMENT)
@@ -39,6 +40,8 @@ const PaymentModule: React.FC = () => {
     if (!router?.query?.PayerID || !links?.[2]?.href) return
 
     try {
+      setIsConfirming(true)
+
       const payload = {
         payId: router.query.PayerID,
         url: links[2].href
@@ -64,6 +67,8 @@ const PaymentModule: React.FC = () => {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsConfirming(false)
     }
   }
 
@@ -81,17 +86,17 @@ const PaymentModule: React.FC = () => {
           title="Bấm xác nhận để hoàn tất thanh toán"
           subTitle={`Payment Id: ${router?.query?.PayerID}`}
           extra={[
-            <Button
-              size="large"
-              type="primary"
-              key="console"
-              onClick={handleConfirmPayment}
-            >
-              Xác nhận
-            </Button>
-            // <Button size="large" key="buy">
-            //   Hủy
-            // </Button>
+            isConfirming ? (
+              <Spin />
+            ) : (
+              <Button
+                size="large"
+                type="success"
+                key="console"
+                text="Xác nhận"
+                onClick={handleConfirmPayment}
+              />
+            )
           ]}
         />
       )}

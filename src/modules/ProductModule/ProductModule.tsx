@@ -10,6 +10,12 @@ import { useAppDispatch } from '@/src/redux/hooks'
 import { addProduct } from '@/src/redux/slices/cartSlice'
 import mainAxios from '@/src/libs/main-axios'
 import { formatPriceVND } from '@/src/utils/format-price'
+import {
+  getLocalStorageItem,
+  jsonParser,
+  setLocalStorageItem
+} from '@/src/utils/local-storage'
+import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key'
 
 const ProductModule: React.FC = () => {
   // useRouter
@@ -47,16 +53,40 @@ const ProductModule: React.FC = () => {
   const addingToCart = () => {
     if (!product) return
 
-    dispatch(
-      addProduct({
-        productId,
-        amount,
-        productName: product.productName,
-        type: product.type,
-        price: product.price,
-        description: product.description
-      })
+    const productsInCart = getLocalStorageItem(
+      LOCAL_STORAGE_KEY.PRODUCTS_IN_CART
     )
+      ? jsonParser(
+          getLocalStorageItem(LOCAL_STORAGE_KEY.PRODUCTS_IN_CART) as string
+        )
+      : []
+
+    const newProduct = {
+      productId,
+      amount,
+      productName: product.productName,
+      type: product.type,
+      price: product.price,
+      description: product.description
+    }
+
+    const newProductsInCart = [...productsInCart, newProduct]
+
+    setLocalStorageItem(
+      LOCAL_STORAGE_KEY.PRODUCTS_IN_CART,
+      JSON.stringify(newProductsInCart)
+    )
+
+    // dispatch(
+    //   addProduct({
+    //     productId,
+    //     amount,
+    //     productName: product.productName,
+    //     type: product.type,
+    //     price: product.price,
+    //     description: product.description
+    //   })
+    // )
 
     message.success('Thêm vào giỏ hàng thành công')
   }

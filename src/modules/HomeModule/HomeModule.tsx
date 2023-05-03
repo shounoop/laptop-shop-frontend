@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import mainAxios from '@/src/libs/main-axios'
 import { Button, Title } from '@/src/components'
-import { Col, Input, Row } from 'antd'
+import { Col, Input, Row, Spin } from 'antd'
 import LaptopItem from './LaptopItem'
 import DATA from './mock-data.json'
 
-const HomePage: React.FC = () => {
+const HomeModule: React.FC = () => {
   // useState
   const [laptops, setLaptops] = useState<any[]>()
   const [searchKey, setSearchKey] = useState<string>('')
   const [filteredLaptops, setFilteredLaptops] = useState<any[]>(DATA)
+  const [isCallingApi, setIsCallingApi] = useState(false)
 
   // useEffect
   useEffect(() => {
@@ -28,6 +29,8 @@ const HomePage: React.FC = () => {
   // functions
   const searchHandler = async () => {
     try {
+      setIsCallingApi(true)
+
       const res: any = await mainAxios.get(
         `http://localhost:3004/products?search=${searchKey || ''}`
       )
@@ -35,6 +38,8 @@ const HomePage: React.FC = () => {
       setFilteredLaptops(res)
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsCallingApi(false)
     }
   }
 
@@ -75,16 +80,22 @@ const HomePage: React.FC = () => {
         </Col>
       </Row>
 
-      <Row gutter={[24, 24]} className="mt-6">
-        {filteredLaptops &&
-          filteredLaptops?.map((item, index) => (
-            <Col span={8} key={index}>
-              <LaptopItem data={item} />
-            </Col>
-          ))}
-      </Row>
+      {isCallingApi ? (
+        <Row justify={'center'} className="mt-6">
+          <Spin />
+        </Row>
+      ) : (
+        <Row gutter={[24, 24]} justify={'start'} className="mt-6">
+          {filteredLaptops &&
+            filteredLaptops?.map((item, index) => (
+              <Col span={8} key={index}>
+                <LaptopItem data={item} />
+              </Col>
+            ))}
+        </Row>
+      )}
     </div>
   )
 }
 
-export default HomePage
+export default HomeModule

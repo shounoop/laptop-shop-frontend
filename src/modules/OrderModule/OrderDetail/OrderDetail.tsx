@@ -19,14 +19,10 @@ interface DataType {
 const OrderDetail: React.FC = () => {
   // useRouter
   const router = useRouter()
-
   const orderId: string | null = (router.query?.id as string) || null
 
   // useState
   const [records, setRecords] = useState<DataType[]>()
-  const [orders, setOrders] = useState<any[]>()
-  const [userId] = useState(`01GWERG71ZWADVFBEZ990353K3`)
-
   const [order, setOrder] = useState<any>()
   const [totalCost, setTotalCost] = useState<any>()
 
@@ -205,7 +201,9 @@ const OrderDetail: React.FC = () => {
               <Title
                 level={4}
                 isNormal
-                text={`${formatPriceVND(order?.deliverFee?.fee)} VNĐ` || '3500$'}
+                text={
+                  `${formatPriceVND(order?.deliverFee?.fee)} VNĐ` || '3500$'
+                }
               />
             </Col>
           </Row>

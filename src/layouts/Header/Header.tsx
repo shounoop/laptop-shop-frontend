@@ -11,8 +11,13 @@ import {
   setIsAuthenticated
 } from '@/src/redux/slices/authSlice'
 import { Button, LoginModal, Title } from '@/src/components'
-import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons'
+import {
+  SettingOutlined,
+  ShoppingCartOutlined,
+  UserOutlined
+} from '@ant-design/icons'
 import Link from 'next/link'
+import COOKIE_KEY from '@/src/shared/cookie-key'
 
 const Header: React.FC = () => {
   // store
@@ -28,13 +33,13 @@ const Header: React.FC = () => {
   }
 
   const handleLogout = () => {
-    deleteCookie(LOCAL_STORAGE_KEY.TOKEN)
+    deleteCookie(COOKIE_KEY.TOKEN)
     window.location.reload()
   }
 
   // useEffect
   useEffect(() => {
-    const token = getCookie(LOCAL_STORAGE_KEY.TOKEN)
+    const token = getCookie(COOKIE_KEY.TOKEN)
 
     if (token && isAuthenticatedJwt(token)) {
       dispatch(setIsAuthenticated(true))
@@ -89,6 +94,25 @@ const Header: React.FC = () => {
               placement="bottomRight"
               overlay={
                 <div className="p-2">
+                  <Link href={`#`}>
+                    {/* <Row className="rounded px-2 py-2 hover:bg-slate-200"> */}
+                    <Row
+                      gutter={8}
+                      align={'middle'}
+                      className="rounded px-2 py-2 hover:bg-slate-100"
+                    >
+                      <Col>
+                        <Row align={'middle'}>
+                          <UserOutlined style={{ color: `black` }} />
+                        </Row>
+                      </Col>
+
+                      <Col>
+                        <Title level={5} isNormal text={`Thông tin cơ bản`} />
+                      </Col>
+                    </Row>
+                  </Link>
+
                   <Link href={PATH.ORDERS}>
                     {/* <Row className="rounded px-2 py-2 hover:bg-slate-200"> */}
                     <Row
@@ -108,17 +132,36 @@ const Header: React.FC = () => {
                     </Row>
                   </Link>
 
+                  <Link href={`#`}>
+                    {/* <Row className="rounded px-2 py-2 hover:bg-slate-200"> */}
+                    <Row
+                      gutter={8}
+                      align={'middle'}
+                      className="rounded px-2 py-2 hover:bg-slate-100"
+                    >
+                      <Col>
+                        <Row align={'middle'}>
+                          <SettingOutlined style={{ color: `black` }} />
+                        </Row>
+                      </Col>
+
+                      <Col>
+                        <Title level={5} isNormal text={`Cài đặt`} />
+                      </Col>
+                    </Row>
+                  </Link>
+
                   <div className="mt-2">
                     <Button
                       onClick={handleLogout}
                       className="w-full"
-                      text="Sign out"
+                      text="Đăng xuất"
                     />
                   </div>
                 </div>
               }
             >
-              <Row align={'middle'}>
+              <Row className="cursor-default" align={'middle'}>
                 <Col className="mr-2">
                   <Row align={'middle'} className="h-full">
                     <Title isNormal level={5} text={'Hoang Tuan'} />
