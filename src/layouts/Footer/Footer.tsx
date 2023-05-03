@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
   return (
     <div className="bg-white px-[90px] py-8">
       <Title
-        text={`CÔNG TY CỔ PHẦN THƯƠNG MAI MÁY TÍNH HOÀNG MINH`}
+        text={`CÔNG TY CỔ PHẦN THƯƠNG MẠI MÁY TÍNH HOÀNG MINH`}
         level={4}
         className="mb-2"
       />
