@@ -4,7 +4,7 @@ import { Col, Row, Typography } from 'antd'
 
 const Footer: React.FC = () => {
   return (
-    <div className="bg-white px-[90px] py-4">
+    <div className="bg-white px-[90px] py-8">
       <Title
         text={`CÔNG TY CỔ PHẦN THƯƠNG MAI MÁY TÍNH HOÀNG MINH`}
         level={4}
