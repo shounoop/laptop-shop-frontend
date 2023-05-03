@@ -13,6 +13,7 @@ import {
 import { Button, LoginModal, Title } from '@/src/components'
 import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons'
 import Link from 'next/link'
+import COOKIE_KEY from '@/src/shared/cookie-key'
 
 const Header: React.FC = () => {
   // store
@@ -28,13 +29,13 @@ const Header: React.FC = () => {
   }
 
   const handleLogout = () => {
-    deleteCookie(LOCAL_STORAGE_KEY.TOKEN)
+    deleteCookie(COOKIE_KEY.TOKEN)
     window.location.reload()
   }
 
   // useEffect
   useEffect(() => {
-    const token = getCookie(LOCAL_STORAGE_KEY.TOKEN)
+    const token = getCookie(COOKIE_KEY.TOKEN)
 
     if (token && isAuthenticatedJwt(token)) {
       dispatch(setIsAuthenticated(true))

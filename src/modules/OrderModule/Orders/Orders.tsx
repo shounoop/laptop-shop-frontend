@@ -1,9 +1,15 @@
 import { Button, Title } from '@/src/components'
 import mainAxios from '@/src/libs/main-axios'
+import { useAppSelector } from '@/src/redux/hooks'
+import { UserInfo } from '@/src/redux/slices/authSlice'
 import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key'
 import PATH from '@/src/shared/path'
 import { formatPriceVND } from '@/src/utils/format-price'
-import { setLocalStorageItem } from '@/src/utils/local-storage'
+import {
+  getLocalStorageItem,
+  jsonParser,
+  setLocalStorageItem
+} from '@/src/utils/local-storage'
 import { Col, Row, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import Link from 'next/link'
@@ -26,15 +32,23 @@ const Orders: React.FC = () => {
   // useState
   const [records, setRecords] = useState<DataType[]>()
   const [orders, setOrders] = useState<any[]>()
-  const [userId] = useState(`01GWERG71ZWADVFBEZ990353K3`)
+  const [userInfo, setUserInfo] = useState<UserInfo>()
 
   // useEffect
   useEffect(() => {
-    if (!userId) return
+    const localUserInfo = getLocalStorageItem(LOCAL_STORAGE_KEY.USER_INFO)
+      ? jsonParser(getLocalStorageItem(LOCAL_STORAGE_KEY.USER_INFO) as string)
+      : {}
+
+    setUserInfo(localUserInfo)
+  }, [])
+
+  useEffect(() => {
+    if (!userInfo?.userId) return
     ;(async () => {
       try {
         const res: any = await mainAxios.get(
-          `http://localhost:3004/carts?userId=${userId}`
+          `http://localhost:3004/carts?userId=${userInfo.userId}`
         )
 
         setOrders(res)
@@ -42,7 +56,7 @@ const Orders: React.FC = () => {
         console.log(error)
       }
     })()
-  }, [userId])
+  }, [userInfo?.userId])
 
   useEffect(() => {
     if (!orders) return

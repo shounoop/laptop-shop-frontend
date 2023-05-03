@@ -1,9 +1,16 @@
 import { Button, Title } from '@/src/components'
 import mainAxios from '@/src/libs/main-axios'
 import { useAppSelector } from '@/src/redux/hooks'
+import { UserInfo } from '@/src/redux/slices/authSlice'
+import LOCAL_STORAGE_KEY from '@/src/shared/local-storage-key'
 import PATH from '@/src/shared/path'
 import { formatPriceVND } from '@/src/utils/format-price'
-import { Col, Row, Select, Table, message } from 'antd'
+import {
+  getLocalStorageItem,
+  jsonParser,
+  setLocalStorageItem
+} from '@/src/utils/local-storage'
+import { Col, Row, Select, Spin, Table, message } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -12,7 +19,7 @@ interface DataType {
   name: string
   unitPrice: string
   quantity: number
-  delivery: number
+  total: number
 }
 
 const ProductModule: React.FC = () => {
@@ -20,7 +27,7 @@ const ProductModule: React.FC = () => {
   const router = useRouter()
 
   // store
-  const productsInCart = useAppSelector(state => state.cart.productsInCard)
+  // const productsInCart = useAppSelector(state => state.cart.productsInCard)
 
   // useState
   const [delivery, setDelivery] = useState<number>(0)
@@ -32,17 +39,40 @@ const ProductModule: React.FC = () => {
   const [wardCode, setWardCode] = useState<string>()
   const [records, setRecords] = useState<DataType[]>()
   const [totalCost, setTotalCost] = useState<number>()
-  const [userId] = useState(`01GWERG71ZWADVFBEZ990353K3`)
+  const [userInfo, setUserInfo] = useState<UserInfo>()
+  const [productsInCart, setProductsInCart] = useState<any[]>([])
+  const [isCallingApi, setIsCallingApi] = useState(false)
 
   // useEffect
+  useEffect(() => {
+    const localProductsInCart = getLocalStorageItem(
+      LOCAL_STORAGE_KEY.PRODUCTS_IN_CART
+    )
+      ? jsonParser(
+          getLocalStorageItem(LOCAL_STORAGE_KEY.PRODUCTS_IN_CART) as string
+        )
+      : []
+
+    setProductsInCart(localProductsInCart)
+  }, [])
+
+  useEffect(() => {
+    const localUserInfo = getLocalStorageItem(LOCAL_STORAGE_KEY.USER_INFO)
+      ? jsonParser(getLocalStorageItem(LOCAL_STORAGE_KEY.USER_INFO) as string)
+      : {}
+
+    setUserInfo(localUserInfo)
+  }, [])
+
   useEffect(() => {
     if (!productsInCart) return
 
     const mappedRecords: DataType[] = productsInCart.map((item: any) => ({
+      id: item.productId,
       name: item.productName,
       unitPrice: item.price,
       quantity: item.amount,
-      delivery: item.price * item.amount
+      total: item.price * item.amount
     }))
 
     setRecords(mappedRecords)
@@ -125,8 +155,18 @@ const ProductModule: React.FC = () => {
 
   // functions
   const handleDeleteItem = (record: any) => {
-    console.log(record)
-    return null
+    const filteredProductsInCart = productsInCart.filter(
+      (item: any) => item.productId != record.id
+    )
+
+    console.log(filteredProductsInCart)
+
+    setProductsInCart(filteredProductsInCart)
+
+    setLocalStorageItem(
+      LOCAL_STORAGE_KEY.PRODUCTS_IN_CART,
+      JSON.stringify(filteredProductsInCart)
+    )
   }
 
   const onChangeProvice = (value: number) => {
@@ -145,10 +185,17 @@ const ProductModule: React.FC = () => {
   }
 
   const addingOrderHandler = async () => {
-    if (!userId || !wardCode || !districtId || productsInCart?.length < 1)
+    if (
+      !userInfo?.userId ||
+      !wardCode ||
+      !districtId ||
+      productsInCart?.length < 1
+    )
       return
 
     try {
+      setIsCallingApi(true)
+
       const payload = {
         addressId: districtId,
         wardCode,
@@ -157,17 +204,24 @@ const ProductModule: React.FC = () => {
       }
 
       await mainAxios.post(
-        `http://localhost:3004/carts?userId=${userId}`,
+        `http://localhost:3004/carts?userId=${userInfo?.userId}`,
         payload
       )
 
       message.success(`Đặt hàng thành công`)
+
+      setLocalStorageItem(
+        LOCAL_STORAGE_KEY.PRODUCTS_IN_CART,
+        JSON.stringify([])
+      )
 
       setTimeout(() => {
         router.push(PATH.ORDERS)
       }, 2000)
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsCallingApi(false)
     }
   }
 
@@ -175,6 +229,8 @@ const ProductModule: React.FC = () => {
     if (!districtId || !wardCode) return
 
     try {
+      setIsCallingApi(true)
+
       const payload = {
         districtId,
         wardCode
@@ -188,6 +244,8 @@ const ProductModule: React.FC = () => {
       setDelivery(res?.fee || 0)
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsCallingApi(false)
     }
   }
 
@@ -201,7 +259,9 @@ const ProductModule: React.FC = () => {
     {
       title: 'Đơn giá',
       dataIndex: 'unitPrice',
-      render: (_, record) => <Title level={5} text={`${formatPriceVND(record.unitPrice)} VNĐ`} />
+      render: (_, record) => (
+        <Title level={5} text={`${formatPriceVND(record.unitPrice)} VNĐ`} />
+      )
     },
     {
       title: 'Số lượng',
@@ -209,10 +269,14 @@ const ProductModule: React.FC = () => {
       render: (_, record) => <Title level={5} text={record.quantity} />
     },
     {
-      title: 'Số tiền',
-      dataIndex: 'delivery',
+      title: 'Thành tiền',
+      dataIndex: 'total',
       render: (_, record) => (
-        <Title level={5} className="text-primary" text={`${formatPriceVND(record.delivery)} VNĐ`} />
+        <Title
+          level={5}
+          className="text-primary"
+          text={`${formatPriceVND(record.total)} VNĐ`}
+        />
       )
     },
     {
@@ -299,37 +363,55 @@ const ProductModule: React.FC = () => {
       </Row>
 
       {(delivery && totalCost && (
-        <Row gutter={24} align={'middle'} className="mt-10" justify={'end'}>
+        <Row justify={'space-between'} className="mt-10">
           <Col>
-            <Row align={'middle'} gutter={16}>
+            <Title
+              level={4}
+              text={`Phí vận chuyển: ${formatPriceVND(delivery)} VNĐ`}
+            />
+          </Col>
+
+          <Col>
+            <Row gutter={24} align={'middle'} justify={'end'}>
               <Col>
-                <Title
-                  level={4}
-                  isNormal
-                  text={`Tổng thanh toán (${productsInCart.length} sản phẩm):`}
-                />
+                <Row align={'middle'} gutter={16}>
+                  <Col>
+                    <Title
+                      level={4}
+                      isNormal
+                      text={`Tổng thanh toán (${productsInCart.length} sản phẩm):`}
+                    />
+                  </Col>
+
+                  <Col>
+                    <Title
+                      className="text-primary"
+                      level={3}
+                      isNormal
+                      text={`${formatPriceVND(totalCost)} VNĐ`}
+                    />
+                  </Col>
+                </Row>
               </Col>
 
               <Col>
-                <Title
-                  className="text-primary"
-                  level={3}
-                  isNormal
-                  text={`${formatPriceVND(totalCost)} VNĐ`}
+                <Button
+                  onClick={addingOrderHandler}
+                  size="large"
+                  type="primary"
+                  text="Đặt hàng"
+                  className="min-w-[200px]"
                 />
               </Col>
             </Row>
           </Col>
+        </Row>
+      )) ||
+        null}
 
-          <Col>
-            <Button
-              onClick={addingOrderHandler}
-              size="large"
-              type="primary"
-              text="Đặt hàng"
-              className="min-w-[200px]"
-            />
-          </Col>
+      {(isCallingApi && (
+        <Row justify={'center'} className="mt-10">
+          <Spin />
         </Row>
       )) ||
         null}
