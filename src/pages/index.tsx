@@ -1,7 +1,7 @@
-import HomePage from '../modules/Home'
+import HomeModule from '../modules/HomeModule'
 import Head from 'next/head'
 
-export default function Home() {
+export default function HomePage() {
   return (
     <>
       <Head>
@@ -14,7 +14,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <HomePage />
+      <HomeModule />
     </>
   )
 }

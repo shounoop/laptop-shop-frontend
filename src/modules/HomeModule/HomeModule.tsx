@@ -5,7 +5,7 @@ import { Col, Input, Row } from 'antd'
 import LaptopItem from './LaptopItem'
 import DATA from './mock-data.json'
 
-const HomePage: React.FC = () => {
+const HomeModule: React.FC = () => {
   // useState
   const [laptops, setLaptops] = useState<any[]>()
   const [searchKey, setSearchKey] = useState<string>('')
@@ -87,4 +87,4 @@ const HomePage: React.FC = () => {
   )
 }
 
-export default HomePage
+export default HomeModule
