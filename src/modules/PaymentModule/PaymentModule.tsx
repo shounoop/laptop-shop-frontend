@@ -47,7 +47,7 @@ const PaymentModule: React.FC = () => {
         url: links[2].href
       }
 
-      const res = await mainAxios.post(
+      await mainAxios.post(
         `http://localhost:3001/users/execute-payment`,
         payload
       )
@@ -65,6 +65,13 @@ const PaymentModule: React.FC = () => {
           console.log(error)
         }
       }
+
+      // send sms
+      await mainAxios.post(`http://localhost:3001/sms`, {
+        to: `+84919469733`,
+        message: `Your order has been paid successful`
+      })
+
     } catch (error) {
       console.log(error)
     } finally {
