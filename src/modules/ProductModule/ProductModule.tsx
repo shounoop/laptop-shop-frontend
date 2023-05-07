@@ -126,7 +126,7 @@ const ProductModule: React.FC = () => {
               <Title
                 level={5}
                 className="font-normal"
-                text={`12 tháng LaptopAZ`}
+                text={`12 tháng`}
               />
             </Col>
           </Row>

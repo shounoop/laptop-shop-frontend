@@ -154,7 +154,7 @@ const Orders: React.FC = () => {
       )
     },
     {
-      title: 'Số lượng sản phẩm',
+      title: 'Số lượng',
       dataIndex: 'quantity',
       render: (_, record) => <Title level={5} text={record.quantity} />
     },

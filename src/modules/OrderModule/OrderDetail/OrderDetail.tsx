@@ -86,12 +86,12 @@ const OrderDetail: React.FC = () => {
       )
     },
     {
-      title: 'Số lượng sản phẩm',
+      title: 'Số lượng',
       dataIndex: 'amount',
       render: (_, record) => <Title level={5} text={record.amount} />
     },
     {
-      title: 'Tổng',
+      title: 'Thành tiền',
       dataIndex: 'total',
       render: (_, record) => (
         <Title
@@ -101,37 +101,13 @@ const OrderDetail: React.FC = () => {
         />
       )
     }
-
-    // {
-    //   title: 'Thao tác',
-    //   render: (_, record) => (
-    //     <>
-    //       {!record?.isPaid && (
-    //         <Row gutter={16}>
-    //           <Col
-    //             onClick={() => handlePayment(record)}
-    //             className="cursor-pointer"
-    //           >
-    //             <Button type="primary" text="Thanh toán" />
-    //           </Col>
-
-    //           <Col
-    //             onClick={() => handleDeleteItem(record)}
-    //             className="cursor-pointer"
-    //           >
-    //             <Button text="Hủy" />
-    //           </Col>
-    //         </Row>
-    //       )}
-    //     </>
-    //   )
-    // }
   ]
 
   // functions
   const handlePayment = async () => {
     try {
       const payload = {
+        // total: Number((totalCost / 23500).toFixed(2)),
         total: totalCost,
         details: {
           subtotal: totalCost - (order?.deliverFee?.fee || 0),
