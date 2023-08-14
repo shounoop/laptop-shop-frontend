@@ -1,8 +1,8 @@
-name: GitHub Actions Vercel Development Deployment
+name: GitHub Actions Vercel Production Deployment
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_DEV }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
       - main
 
 jobs:
-  dev_build:
+  prod_build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,10 +24,6 @@ jobs:
         run: npm install --global vercel@canary
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - name: Remove env production
-        run: rm .env.production
-      - name: Copy env development -> production
-        run: cp .env .env.production
       - name: Build Project Artifacts
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
