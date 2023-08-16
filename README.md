@@ -11,7 +11,7 @@ This project is built by combining [NextJS](https://nextjs.org/), [Ant Design](h
 - [TailwindCSS](https://tailwindcss.com/)
 - [Ant Design](https://ant.design/)
 
-### Getting Started
+### Getting Started...
 
 First, run the development server:
 
